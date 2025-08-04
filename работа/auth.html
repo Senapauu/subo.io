@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход и регистрация | Субаренда Минск</title>
+    <meta name="description" content="Вход и регистрация на портале субаренды квартир в Минске">
+    <meta name="keywords" content="вход, регистрация, субаренда, минск">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+    
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #FF9800;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --success-color: #4CAF50;
+            --warning-color: #FF9800;
+            --danger-color: #f44336;
+            --basic-50: #f8f9fa;
+            --basic-100: #e9ecef;
+            --basic-200: #dee2e6;
+            --basic-400: #ced4da;
+            --basic-500: #adb5bd;
+            --basic-700: #495057;
+            --basic-800: #343a40;
+            --basic-900: #212529;
+            --info-300: #6c757d;
+            --info-500: #007bff;
+            --info-600: #0056b3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: white;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .auth-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background: white;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .logo {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .logo-text {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-text::before {
+            content: "Субаренда";
+            color: white;
+            margin-right: 0;
+        }
+        
+        .logo-text::after {
+            content: "Минск";
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--basic-400);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--basic-900);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: var(--basic-500);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            margin-top: 0.5rem;
+        }
+        
+        .btn-secondary:hover {
+            background: #1f5f8b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(41, 128, 185, 0.3);
+        }
+        
+        .auth-switch {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--basic-200);
+            text-align: center;
+        }
+        
+        .auth-switch a {
+            color: var(--info-500);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #f5c6cb;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+        
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--basic-500);
+            margin-top: 0.5rem;
+            text-align: left;
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: var(--basic-200);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background: var(--danger-color); }
+        .strength-medium { background: var(--warning-color); }
+        .strength-strong { background: var(--success-color); }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .form-row .form-group {
+            grid-column: span 1;
+        }
+        
+        .form-row .form-group.full-width {
+            grid-column: span 2;
+        }
+        
+        .phone-hint {
+            font-size: 0.8rem;
+            color: var(--basic-500);
+            margin-top: 0.3rem;
+            font-style: italic;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0,0,0,.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .btn-loading {
+            pointer-events: none;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                padding: 1rem;
+            }
+            
+            .auth-card {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .back-link {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 1rem;
+            }
+            
+            .auth-title {
+                font-size: 1.3rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="main.html" class="back-link">
+        ← Вернуться на главную
+    </a>
+    
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Логотип -->
+            <div class="logo">
+                <div class="logo-text">
+                </div>
+            </div>
+            
+            <div class="auth-title">
+                <h2>Вход и регистрация</h2>
+            </div>
+            
+                <!-- Сообщения об ошибках и успехе -->
+            <div class="error-message" id="error-message"></div>
+            <div class="success-message" id="success-message"></div>
+                
+                <!-- Форма входа -->
+            <form class="auth-form" id="login-form">
+                <div class="form-group">
+                    <input type="text" 
+                           id="login-email" 
+                           class="form-input" 
+                           placeholder="Email / +375 (25) 123-45-67" 
+                           name="login" 
+                           autocomplete="on" 
+                           maxlength="255" 
+                           required>
+                    </div>
+                    
+                <div class="form-group">
+                    <input type="password" 
+                           id="login-password" 
+                           class="form-input" 
+                           placeholder="Пароль" 
+                           name="password" 
+                           required>
+                    </div>
+                    
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                        <span class="btn-text">Войти</span>
+                        <span class="loading" style="display: none;"></span>
+                    </button>
+                
+
+            </form>
+                
+
+                
+                <!-- Форма регистрации -->
+            <form class="auth-form" id="register-form" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" 
+                               id="register-name" 
+                               class="form-input" 
+                               placeholder="Имя" 
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" 
+                               id="register-surname" 
+                               class="form-input" 
+                               placeholder="Фамилия" 
+                               required>
+                    </div>
+                    </div>
+                    
+                <div class="form-group">
+                    <input type="email" 
+                           id="register-email" 
+                           class="form-input" 
+                           placeholder="Email" 
+                           required>
+                    </div>
+                    
+                <div class="form-group">
+                    <input type="tel" 
+                           id="register-phone" 
+                           class="form-input" 
+                           placeholder="+375 (25) 123-45-67" 
+                           pattern="^\+375\s?\(?\d{2}\)?\s?\d{3}-?\d{2}-?\d{2}$" 
+                           required>
+                    <small class="phone-hint">Формат: +375 (25) 123-45-67</small>
+                    </div>
+                    
+                <div class="form-group">
+                    <input type="password" 
+                           id="register-password" 
+                           class="form-input" 
+                           placeholder="Пароль" 
+                           required>
+                        <div class="password-requirements">
+                            Минимум 8 символов, включая буквы и цифры
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="password-strength-bar"></div>
+                        </div>
+                    </div>
+                    
+                <div class="form-group">
+                    <input type="password" 
+                           id="register-confirm-password" 
+                           class="form-input" 
+                           placeholder="Подтвердите пароль" 
+                           required>
+                    </div>
+                    
+                <button type="submit" class="btn btn-primary" id="register-btn">
+                        <span class="btn-text">Зарегистрироваться</span>
+                        <span class="loading" style="display: none;"></span>
+                    </button>
+                </form>
+                
+            <!-- Переключение между формами -->
+                <div class="auth-switch">
+                <span id="auth-switch-text">Нет аккаунта?</span>
+                <a id="auth-switch-link" onclick="switchAuthForm()">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Переменные для управления формами
+        let isLoginForm = true;
+        
+        // Функция переключения между формами входа и регистрации
+        function switchAuthForm() {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const switchText = document.getElementById('auth-switch-text');
+            const switchLink = document.getElementById('auth-switch-link');
+            
+            if (isLoginForm) {
+                // Переключаемся на регистрацию
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'flex';
+                switchText.textContent = 'Уже есть аккаунт?';
+                switchLink.textContent = 'Войти';
+                isLoginForm = false;
+            } else {
+                // Переключаемся на вход
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'flex';
+                switchText.textContent = 'Нет аккаунта?';
+                switchLink.textContent = 'Зарегистрироваться';
+                isLoginForm = true;
+            }
+            
+            // Очищаем сообщения об ошибках
+            hideMessages();
+        }
+        
+
+        
+        // Функция форматирования номера телефона
+        function formatPhoneNumber(input) {
+            // Удаляем все символы кроме цифр
+            let value = input.replace(/\D/g, '');
+            
+            // Если начинается с 375, добавляем +
+            if (value.startsWith('375')) {
+                value = '+' + value;
+            }
+            // Если начинается с +375, оставляем как есть
+            else if (value.startsWith('+375')) {
+                // уже правильно
+            }
+            // Если начинается с другой цифры, предполагаем что это белорусский номер
+            else if (value.length > 0 && !value.startsWith('375')) {
+                value = '+375' + value;
+            }
+            
+            // Форматируем: +375 (XX) XXX-XX-XX
+            if (value.startsWith('+375')) {
+                const numbers = value.substring(4); // убираем +375
+                if (numbers.length === 0) {
+                    return '+375 ';
+                } else if (numbers.length <= 2) {
+                    return '+375 (' + numbers;
+                } else if (numbers.length <= 5) {
+                    return '+375 (' + numbers.substring(0, 2) + ') ' + numbers.substring(2);
+                } else if (numbers.length <= 7) {
+                    return '+375 (' + numbers.substring(0, 2) + ') ' + numbers.substring(2, 5) + '-' + numbers.substring(5);
+                } else {
+                    return '+375 (' + numbers.substring(0, 2) + ') ' + numbers.substring(2, 5) + '-' + numbers.substring(5, 7) + '-' + numbers.substring(7, 9);
+                }
+            }
+            
+            return value;
+        }
+        
+        // Добавляем обработчики для автоформатирования телефона
+        document.addEventListener('DOMContentLoaded', function() {
+            // Для поля входа
+            const loginField = document.getElementById('login-email');
+            loginField.addEventListener('input', function(e) {
+                const cursorPos = e.target.selectionStart;
+                const oldValue = e.target.value;
+                
+                // Проверяем, похоже ли на номер телефона (начинается с + или цифры)
+                if (oldValue.startsWith('+') || oldValue.startsWith('3') || /^\d/.test(oldValue)) {
+                    const formatted = formatPhoneNumber(oldValue);
+                    e.target.value = formatted;
+                    
+                    // Восстанавливаем позицию курсора
+                    const newCursorPos = cursorPos + (formatted.length - oldValue.length);
+                    e.target.setSelectionRange(newCursorPos, newCursorPos);
+                }
+            });
+            
+            // Для поля SMS
+            const smsPhoneField = document.getElementById('sms-phone');
+            if (smsPhoneField) {
+                smsPhoneField.addEventListener('input', function(e) {
+                    const cursorPos = e.target.selectionStart;
+                    const oldValue = e.target.value;
+                    const formatted = formatPhoneNumber(oldValue);
+                    e.target.value = formatted;
+                    
+                    // Восстанавливаем позицию курсора
+                    const newCursorPos = cursorPos + (formatted.length - oldValue.length);
+                    e.target.setSelectionRange(newCursorPos, newCursorPos);
+                });
+            }
+            
+            // Для поля регистрации
+            const registerPhoneField = document.getElementById('register-phone');
+            if (registerPhoneField) {
+                registerPhoneField.addEventListener('input', function(e) {
+                    const cursorPos = e.target.selectionStart;
+                    const oldValue = e.target.value;
+                    const formatted = formatPhoneNumber(oldValue);
+                    e.target.value = formatted;
+                    
+                    // Восстанавливаем позицию курсора
+                    const newCursorPos = cursorPos + (formatted.length - oldValue.length);
+                    e.target.setSelectionRange(newCursorPos, newCursorPos);
+                });
+            }
+            
+            // Обработчик события для проверки пароля
+            const registerPasswordField = document.getElementById('register-password');
+            if (registerPasswordField) {
+                console.log('Обработчик пароля добавлен');
+                registerPasswordField.addEventListener('input', function() {
+                    console.log('Пароль изменен:', this.value);
+                    checkPasswordStrength(this.value);
+                });
+            } else {
+                console.log('Поле пароля не найдено');
+            }
+        });
+        
+        // Обработчик формы SMS входа
+        const smsForm = document.getElementById('sms-form');
+        if (smsForm) {
+            smsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const phone = document.getElementById('sms-phone').value.trim();
+                const smsCode = document.getElementById('sms-code').value.trim();
+                
+                if (!phone) {
+                    showError('Введите номер телефона');
+                    return;
+                }
+                
+                if (!smsCode) {
+                    showError('Введите SMS-код');
+                    return;
+                }
+                
+                showLoading('sms-login-btn');
+                
+                // Отправляем запрос на сервер для входа по SMS
+                fetch('api.php?action=login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        login: phone,
+                        sms_code: smsCode
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading('sms-login-btn');
+                    
+                    if (data.success) {
+                        showSuccess('Вход выполнен успешно!');
+                        
+                        // Сохраняем данные пользователя в localStorage
+                        localStorage.setItem('realtUser', JSON.stringify(data.user));
+                        
+                        // Перенаправляем на главную страницу через 2 секунды
+                        setTimeout(() => {
+                            window.location.href = 'main.html';
+                        }, 2000);
+                    } else {
+                        showError(data.message || 'Ошибка входа. Проверьте данные.');
+                    }
+                })
+                .catch(error => {
+                    hideLoading('sms-login-btn');
+                    console.error('Ошибка входа:', error);
+                    showError('Ошибка соединения с сервером');
+                });
+            });
+        }
+        
+        // Функции для работы с сообщениями
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            document.getElementById('success-message').style.display = 'none';
+        }
+        
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        function hideMessages() {
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('success-message').style.display = 'none';
+        }
+        
+        // Функция проверки силы пароля
+        function checkPasswordStrength(password) {
+            console.log('Проверка силы пароля:', password);
+            const strengthBar = document.getElementById('password-strength-bar');
+            if (!strengthBar) {
+                console.log('Индикатор силы пароля не найден');
+                return;
+            }
+            
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 25;
+            if (/[a-z]/.test(password)) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            
+            console.log('Сила пароля:', strength);
+            strengthBar.style.width = strength + '%';
+            strengthBar.className = 'password-strength-bar';
+            
+            if (strength < 50) {
+                strengthBar.classList.add('strength-weak');
+            } else if (strength < 75) {
+                strengthBar.classList.add('strength-medium');
+            } else {
+                strengthBar.classList.add('strength-strong');
+            }
+        }
+        
+        // Функция показа загрузки
+        function showLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            const btnText = button.querySelector('.btn-text');
+            const loading = button.querySelector('.loading');
+            
+            btnText.style.display = 'none';
+            loading.style.display = 'inline-block';
+            button.classList.add('btn-loading');
+            button.disabled = true;
+        }
+        
+        // Функция скрытия загрузки
+        function hideLoading(buttonId) {
+            const button = document.getElementById(buttonId);
+            const btnText = button.querySelector('.btn-text');
+            const loading = button.querySelector('.loading');
+            
+            btnText.style.display = 'inline';
+            loading.style.display = 'none';
+            button.classList.remove('btn-loading');
+            button.disabled = false;
+        }
+        
+        // Обработчик формы входа
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const login = document.getElementById('login-email').value.trim();
+                const password = document.getElementById('login-password').value;
+                
+                if (!login) {
+                    showError('Пожалуйста, введите email или номер телефона');
+                    return;
+                }
+                
+                if (!password) {
+                    showError('Пожалуйста, введите пароль');
+                    return;
+                }
+                
+                showLoading('login-btn');
+                
+                // Отправляем запрос на сервер для входа
+                fetch('api.php?action=login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        login: login,
+                        password: password
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading('login-btn');
+                    
+                    if (data.success) {
+                        showSuccess('Вход выполнен успешно!');
+                        
+                        // Сохраняем данные пользователя в localStorage
+                        localStorage.setItem('realtUser', JSON.stringify(data.user));
+                        
+                        // Перенаправляем на главную страницу через 2 секунды
+                        setTimeout(() => {
+                            window.location.href = 'main.html';
+                        }, 2000);
+                    } else {
+                        showError(data.message || 'Ошибка входа. Проверьте данные.');
+                    }
+                })
+                .catch(error => {
+                    hideLoading('login-btn');
+                    console.error('Ошибка входа:', error);
+                    showError('Ошибка соединения с сервером');
+                });
+            });
+        }
+        
+        // Обработчик формы регистрации
+        const registerForm = document.getElementById('register-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('register-name').value.trim();
+                const surname = document.getElementById('register-surname').value.trim();
+                const email = document.getElementById('register-email').value.trim();
+                const phone = document.getElementById('register-phone').value.trim();
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                // Валидация полей
+                if (!name || !surname || !email || !phone || !password || !confirmPassword) {
+                    showError('Пожалуйста, заполните все поля');
+                    return;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError('Пожалуйста, введите корректный email');
+                    return;
+                }
+                
+                const phoneRegex = /^\+375\s?\(?\d{2}\)?\s?\d{3}-?\d{2}-?\d{2}$/;
+                if (!phoneRegex.test(phone)) {
+                    showError('Пожалуйста, введите корректный номер телефона');
+                    return;
+                }
+                
+                if (password.length < 8) {
+                    showError('Пароль должен содержать минимум 8 символов');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    showError('Пароли не совпадают');
+                    return;
+                }
+                
+                showLoading('register-btn');
+                
+                // Отправляем запрос на сервер для регистрации
+                fetch('api.php?action=register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        surname: surname,
+                        email: email,
+                        phone: phone,
+                        password: password
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading('register-btn');
+                    
+                    if (data.success) {
+                        showSuccess('Регистрация успешно завершена!');
+                        
+                        // Сохраняем данные пользователя в localStorage
+                        localStorage.setItem('realtUser', JSON.stringify(data.user));
+                        
+                        // Перенаправляем на главную страницу через 3 секунды
+                        setTimeout(() => {
+                            window.location.href = 'main.html';
+                        }, 3000);
+                    } else {
+                        showError(data.message || 'Ошибка регистрации. Попробуйте еще раз.');
+                    }
+                })
+                .catch(error => {
+                    hideLoading('register-btn');
+                    console.error('Ошибка регистрации:', error);
+                    showError('Ошибка соединения с сервером');
+                });
+            });
+        }
+        
+        // Проверяем, авторизован ли пользователь при загрузке страницы
+        window.addEventListener('load', function() {
+            const userData = localStorage.getItem('realtUser');
+            if (userData) {
+                const user = JSON.parse(userData);
+                if (user.isLoggedIn) {
+                    // Если пользователь уже авторизован, перенаправляем на главную
+                    window.location.href = 'main.html';
+                }
+            }
+        });
+        
+        // Обработчик для поля телефона - автоматическое форматирование
+        document.getElementById('register-phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.startsWith('375')) {
+                value = '+' + value;
+            } else if (value.startsWith('80')) {
+                value = '+375' + value.substring(2);
+            } else if (value.startsWith('0')) {
+                value = '+375' + value.substring(1);
+            }
+            
+            // Форматируем номер телефона
+            if (value.length >= 4) {
+                value = value.replace(/(\+375)(\d{2})(\d{3})(\d{2})(\d{2})/, '+375 ($2) $3-$4-$5');
+            }
+            
+            e.target.value = value;
+        });
+        
+        // Обработчик для поля логина - поддержка email и телефона
+        document.getElementById('login-email').addEventListener('input', function(e) {
+            let value = e.target.value;
+            
+            // Если введен номер телефона без кода страны, добавляем +375
+            if (value.match(/^8\d{9}$/)) {
+                value = '+375' + value.substring(1);
+            } else if (value.match(/^0\d{9}$/)) {
+                value = '+375' + value.substring(1);
+            }
+            
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html> 

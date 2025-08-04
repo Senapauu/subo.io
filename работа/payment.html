@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата - СубарендаМинск</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .payment-header {
+            background: linear-gradient(135deg, var(--accent-color), #2980b9);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .payment-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-body {
+            padding: 2rem;
+        }
+
+        /* Payment Details */
+        .payment-details {
+            background: var(--light-gray);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .detail-label {
+            color: var(--dark-gray);
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            margin-bottom: 2rem;
+        }
+
+        .payment-methods h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .method-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .method-option {
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .method-option:hover {
+            border-color: var(--accent-color);
+            background: rgba(52, 152, 219, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .method-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(52, 152, 219, 0.1);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .method-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
+        }
+
+        .method-description {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        /* Payment Form */
+        .payment-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        /* Payment Actions */
+        .payment-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--light-gray);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--success-color), #229954);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Security Notice */
+        .security-notice {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .security-notice .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Payment Instructions */
+        .payment-instructions {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .payment-instructions h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .bank-details {
+            background: white;
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .bank-details p {
+            margin: 0.5rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+
+        .status-completed {
+            background: rgba(39, 174, 96, 0.2);
+            color: var(--success-color);
+        }
+
+        .status-failed {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .method-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-actions {
+                flex-direction: column;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Субаренда<span>Минск</span></div>
+                <div class="nav-buttons">
+                    <a href="main.html" class="btn btn-secondary">← На главную</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="payment-container">
+                <div class="payment-header">
+                    <h1>💳 Оплата бронирования</h1>
+                    <p>Безопасная оплата через банковский перевод или ЕРИП</p>
+                </div>
+
+                <div class="payment-body">
+                    <!-- Детали платежа -->
+                    <div class="payment-details">
+                        <h3>📋 Детали бронирования</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Квартира:</span>
+                            <span class="detail-value" id="apartment-title">Уютная 2-комнатная в центре</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Адрес:</span>
+                            <span class="detail-value" id="apartment-address">ул. Ленина, 15</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Период:</span>
+                            <span class="detail-value" id="booking-period">15.01.2025 - 20.01.2025</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Количество ночей:</span>
+                            <span class="detail-value" id="nights-count">5</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Стоимость за ночь:</span>
+                            <span class="detail-value" id="price-per-night">100 BYN</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Комиссия сервиса (15%):</span>
+                            <span class="detail-value" id="commission-amount">75 BYN</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Итого к оплате:</span>
+                            <span class="detail-value" id="total-amount">575 BYN</span>
+                        </div>
+                    </div>
+
+                    <!-- Уведомление о безопасности -->
+                    <div class="security-notice">
+                        <div class="icon">🔒</div>
+                        <h4>Безопасная оплата</h4>
+                        <p>Все платежи защищены SSL-шифрованием. Данные карты не сохраняются на сервере.</p>
+                    </div>
+
+                    <!-- Способы оплаты -->
+                    <div class="payment-methods">
+                        <h3>💳 Выберите способ оплаты</h3>
+                        <div class="method-options">
+                            <div class="method-option selected" data-method="bank-transfer">
+                                <div class="method-icon">🏦</div>
+                                <div class="method-name">Банковский перевод</div>
+                                <div class="method-description">Через интернет-банк</div>
+                            </div>
+                            <div class="method-option" data-method="erip">
+                                <div class="method-icon">📱</div>
+                                <div class="method-name">Система "Расчет"</div>
+                                <div class="method-description">ЕРИП</div>
+                            </div>
+                            <div class="method-option" data-method="card">
+                                <div class="method-icon">💳</div>
+                                <div class="method-name">Онлайн-платеж</div>
+                                <div class="method-description">Visa, MasterCard, МИР</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Форма оплаты -->
+                    <div class="payment-form" id="payment-form">
+                        <!-- Здесь будут отображаться инструкции для выбранного способа оплаты -->
+                    </div>
+
+                    <!-- Действия -->
+                    <div class="payment-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cancelPayment()">Отмена</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Обрабатываем платеж...</p>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="success-message">
+                <div class="success-icon">✅</div>
+                <h3>Оплата прошла успешно!</h3>
+                <p>Ваше бронирование подтверждено. Мы отправили подтверждение на ваш email.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="main.html" class="btn btn-primary">Вернуться на главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Конфигурация платежей
+        const PAYMENT_CONFIG = {
+            commission: 0.15, // 15% комиссия
+            currency: 'BYN',
+            bankAccount: 'BY12VTBB30120000000000000000',
+            bankName: 'ОАО "Банк ВТБ (Беларусь)"',
+            companyName: 'ООО "СубарендаМинск"',
+            eripCode: '1234567'
+        };
+
+        // Данные платежа
+        let paymentData = {
+            apartmentId: null,
+            bookingId: null,
+            amount: 0,
+            currency: 'BYN',
+            description: 'Оплата бронирования квартиры',
+            method: 'bank-transfer',
+            status: 'pending'
+        };
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePayment();
+            loadPaymentData();
+        });
+
+        // Инициализация платежной системы
+        function initializePayment() {
+            // Обработчики для выбора способа оплаты
+            const methodOptions = document.querySelectorAll('.method-option');
+            methodOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    methodOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const method = this.getAttribute('data-method');
+                    paymentData.method = method;
+                    showPaymentForm(method);
+                });
+            });
+
+            // Показываем инструкции для банковского перевода по умолчанию
+            showPaymentForm('bank-transfer');
+        }
+
+        // Загрузка данных платежа
+        async function loadPaymentData() {
+            try {
+                // Получаем данные из URL параметров
+                const urlParams = new URLSearchParams(window.location.search);
+                const bookingId = urlParams.get('bookingId');
+                
+                if (bookingId) {
+                    // Загружаем данные бронирования с сервера
+                    const response = await fetch(`api.php?action=get_booking&booking_id=${bookingId}`);
+                    const result = await response.json();
+                    
+                    if (result.success && result.data) {
+                        updatePaymentDetails(result.data);
+                    } else {
+                        // Если нет данных с сервера, пробуем localStorage
+                        const booking = JSON.parse(localStorage.getItem(`booking_${bookingId}`));
+                        if (booking) {
+                            updatePaymentDetails(booking);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки данных платежа:', error);
+                // Показываем демо-данные
+                showDemoData();
+            }
+        }
+
+        // Обновление деталей платежа
+        function updatePaymentDetails(booking) {
+            document.getElementById('apartment-title').textContent = booking.apartment_title || booking.apartmentTitle || 'Квартира';
+            document.getElementById('apartment-address').textContent = booking.apartment_address || booking.apartmentAddress || 'Адрес';
+            document.getElementById('booking-period').textContent = `${booking.check_in || booking.checkIn} - ${booking.check_out || booking.checkOut}`;
+            document.getElementById('nights-count').textContent = booking.nights || calculateNights(booking.check_in || booking.checkIn, booking.check_out || booking.checkOut);
+            
+            const pricePerNight = booking.price_per_night || booking.pricePerNight || 100;
+            document.getElementById('price-per-night').textContent = `${pricePerNight} BYN`;
+            
+            const totalAmount = booking.total_amount || booking.totalAmount || (pricePerNight * (booking.nights || 1));
+            const commission = Math.round(totalAmount * PAYMENT_CONFIG.commission);
+            document.getElementById('commission-amount').textContent = `${commission} BYN`;
+            document.getElementById('total-amount').textContent = `${totalAmount + commission} BYN`;
+            
+            paymentData.amount = totalAmount + commission;
+            paymentData.bookingId = booking.id || booking.booking_id;
+            paymentData.apartmentId = booking.apartment_id || booking.apartmentId;
+        }
+
+        // Показать демо-данные
+        function showDemoData() {
+            const demoBooking = {
+                apartment_title: 'Уютная 2-комнатная в центре',
+                apartment_address: 'ул. Ленина, 15',
+                check_in: '15.01.2025',
+                check_out: '20.01.2025',
+                nights: 5,
+                price_per_night: 100,
+                total_amount: 500,
+                id: 'demo_' + Date.now()
+            };
+            updatePaymentDetails(demoBooking);
+        }
+
+        // Расчет количества ночей
+        function calculateNights(checkIn, checkOut) {
+            const start = new Date(checkIn);
+            const end = new Date(checkOut);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Показать форму оплаты в зависимости от выбранного метода
+        function showPaymentForm(method) {
+            const paymentForm = document.getElementById('payment-form');
+            
+            if (method === 'bank-transfer') {
+                showBankTransferForm();
+            } else if (method === 'erip') {
+                showEripForm();
+            } else if (method === 'card') {
+                showCardPaymentForm();
+            }
+        }
+
+        // Показать форму банковского перевода
+        function showBankTransferForm() {
+            const instructions = `
+                <div class="payment-instructions">
+                    <h4>🏦 Банковский перевод</h4>
+                    <div class="bank-details">
+                        <p><strong>Получатель:</strong> ${PAYMENT_CONFIG.companyName}</p>
+                        <p><strong>Банк:</strong> ${PAYMENT_CONFIG.bankName}</p>
+                        <p><strong>Счет:</strong> ${PAYMENT_CONFIG.bankAccount}</p>
+                        <p><strong>Сумма:</strong> ${paymentData.amount} ${paymentData.currency}</p>
+                        <p><strong>Назначение:</strong> Оплата бронирования №${paymentData.bookingId}</p>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="copy-btn" onclick="copyBankDetails()">📋 Скопировать реквизиты</button>
+                        <button class="copy-btn" onclick="downloadBankDetails()">📄 Скачать PDF</button>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-success" onclick="confirmBankTransfer()">✅ Подтвердить оплату</button>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(52, 152, 219, 0.1); border-radius: 8px;">
+                        <p><strong>⚠️ Важно:</strong></p>
+                        <p>• После перевода нажмите "Подтвердить оплату"</p>
+                        <p>• Сохраните квитанцию об оплате</p>
+                        <p>• Мы проверим платеж в течение 1-2 часов</p>
+                        <p>• Уведомление придет на email и SMS</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('payment-form').innerHTML = instructions;
+        }
+
+        // Показать форму ЕРИП
+        function showEripForm() {
+            const instructions = `
+                <div class="payment-instructions">
+                    <h4>📱 Система "Расчет" (ЕРИП)</h4>
+                    <div class="bank-details">
+                        <p><strong>Код услуги:</strong> ${PAYMENT_CONFIG.eripCode}</p>
+                        <p><strong>Номер бронирования:</strong> ${paymentData.bookingId}</p>
+                        <p><strong>Сумма к оплате:</strong> ${paymentData.amount} ${paymentData.currency}</p>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="copy-btn" onclick="copyEripDetails()">📋 Скопировать данные</button>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <h5>📋 Пошаговая инструкция:</h5>
+                        <ol style="margin-left: 1rem;">
+                            <li>Войдите в интернет-банк или мобильное приложение</li>
+                            <li>Выберите "Платежи" → "Система "Расчет" (ЕРИП)"</li>
+                            <li>Найдите услугу "СубарендаМинск" (код: ${PAYMENT_CONFIG.eripCode})</li>
+                            <li>Введите номер бронирования: <strong>${paymentData.bookingId}</strong></li>
+                            <li>Проверьте сумму: <strong>${paymentData.amount} ${paymentData.currency}</strong></li>
+                            <li>Подтвердите платеж</li>
+                        </ol>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-success" onclick="confirmEripPayment()">✅ Подтвердить оплату</button>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(52, 152, 219, 0.1); border-radius: 8px;">
+                        <p><strong>⚠️ Важно:</strong></p>
+                        <p>• После оплаты нажмите "Подтвердить оплату"</p>
+                        <p>• Сохраните чек об оплате</p>
+                        <p>• Мы проверим платеж в течение 1-2 часов</p>
+                        <p>• Уведомление придет на email и SMS</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('payment-form').innerHTML = instructions;
+        }
+
+        // Показать форму онлайн-платежа
+        function showCardPaymentForm() {
+            const instructions = `
+                <div class="payment-instructions">
+                    <h4>💳 Онлайн-платеж</h4>
+                    <p>Для оплаты онлайн-переводом, пожалуйста, свяжитесь с нами по телефону или электронной почте.</p>
+                    <p>Мы предоставим вам реквизиты для оплаты.</p>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-success" onclick="confirmCardPayment()">✅ Подтвердить оплату</button>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(52, 152, 219, 0.1); border-radius: 8px;">
+                        <p><strong>⚠️ Важно:</strong></p>
+                        <p>• После оплаты нажмите "Подтвердить оплату"</p>
+                        <p>• Сохраните чек об оплате</p>
+                        <p>• Мы проверим платеж в течение 1-2 часов</p>
+                        <p>• Уведомление придет на email и SMS</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('payment-form').innerHTML = instructions;
+        }
+
+        // Копирование банковских реквизитов
+        function copyBankDetails() {
+            const bankDetails = `Получатель: ${PAYMENT_CONFIG.companyName}
+Банк: ${PAYMENT_CONFIG.bankName}
+Счет: ${PAYMENT_CONFIG.bankAccount}
+Сумма: ${paymentData.amount} ${paymentData.currency}
+Назначение: Оплата бронирования №${paymentData.bookingId}`;
+            
+            navigator.clipboard.writeText(bankDetails).then(() => {
+                showNotification('Реквизиты скопированы в буфер обмена!', 'success');
+            }).catch(() => {
+                showNotification('Не удалось скопировать. Скопируйте вручную:\n\n' + bankDetails, 'error');
+            });
+        }
+
+        // Скачивание банковских реквизитов в PDF
+        function downloadBankDetails() {
+            // Здесь можно добавить генерацию PDF
+            showNotification('Функция скачивания PDF будет добавлена позже', 'info');
+        }
+
+        // Копирование данных ЕРИП
+        function copyEripDetails() {
+            const eripDetails = `Код услуги: ${PAYMENT_CONFIG.eripCode}
+Номер бронирования: ${paymentData.bookingId}
+Сумма к оплате: ${paymentData.amount} ${paymentData.currency}`;
+            
+            navigator.clipboard.writeText(eripDetails).then(() => {
+                showNotification('Данные ЕРИП скопированы в буфер обмена!', 'success');
+            }).catch(() => {
+                showNotification('Не удалось скопировать. Скопируйте вручную:\n\n' + eripDetails, 'error');
+            });
+        }
+
+        // Подтверждение банковского перевода
+        async function confirmBankTransfer() {
+            if (confirm('Вы уже совершили банковский перевод? После подтверждения мы проверим платеж в течение 1-2 часов.')) {
+                showLoading();
+                
+                try {
+                    // Отправляем данные на сервер
+                    const paymentRecord = {
+                        booking_id: paymentData.bookingId,
+                        amount: paymentData.amount,
+                        currency: paymentData.currency,
+                        method: 'bank-transfer',
+                        status: 'pending',
+                        timestamp: new Date().toISOString()
+                    };
+
+                    const response = await fetch('api.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'create_payment',
+                            payment: paymentRecord
+                        })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        hideLoading();
+                        showPendingMessage('Банковский перевод', 'Мы проверим ваш платеж в течение 1-2 часов и уведомим вас о результате.');
+                    } else {
+                        throw new Error(result.message || 'Ошибка создания платежа');
+                    }
+                } catch (error) {
+                    hideLoading();
+                    console.error('Ошибка подтверждения платежа:', error);
+                    showNotification('Ошибка подтверждения платежа. Попробуйте позже.', 'error');
+                }
+            }
+        }
+
+        // Подтверждение оплаты через ЕРИП
+        async function confirmEripPayment() {
+            showLoading();
+            
+            try {
+                // Сначала создаем платеж в нашей системе
+                const paymentRecord = {
+                    booking_id: paymentData.bookingId,
+                    amount: paymentData.amount,
+                    currency: paymentData.currency,
+                    method: 'erip',
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
+                };
+
+                const response = await fetch('api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'create_payment',
+                        payment: paymentRecord
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Теперь создаем платеж в ЕРИП
+                    const eripResponse = await fetch('erip_api.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'create_payment',
+                            payment_id: result.payment_id,
+                            booking_id: paymentData.bookingId,
+                            amount: paymentData.amount
+                        })
+                    });
+
+                    const eripResult = await eripResponse.json();
+                    
+                    if (eripResult.success) {
+                        hideLoading();
+                        // Перенаправляем на страницу оплаты ЕРИП
+                        window.location.href = eripResult.payment_url;
+                    } else {
+                        throw new Error(eripResult.message || 'Ошибка создания платежа в ЕРИП');
+                    }
+                } else {
+                    throw new Error(result.message || 'Ошибка создания платежа');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Ошибка создания платежа:', error);
+                showNotification('Ошибка создания платежа. Попробуйте позже.', 'error');
+            }
+        }
+
+        // Подтверждение онлайн-платежа
+        async function confirmCardPayment() {
+            if (confirm('Вы уже совершили онлайн-платеж? После подтверждения мы проверим платеж в течение 1-2 часов.')) {
+                showLoading();
+                
+                try {
+                    // Отправляем данные на сервер
+                    const paymentRecord = {
+                        booking_id: paymentData.bookingId,
+                        amount: paymentData.amount,
+                        currency: paymentData.currency,
+                        method: 'card',
+                        status: 'pending',
+                        timestamp: new Date().toISOString()
+                    };
+
+                    const response = await fetch('api.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'create_payment',
+                            payment: paymentRecord
+                        })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        hideLoading();
+                        showPendingMessage('Онлайн-платеж', 'Мы проверим ваш платеж в течение 1-2 часов и уведомим вас о результате.');
+                    } else {
+                        throw new Error(result.message || 'Ошибка создания платежа');
+                    }
+                } catch (error) {
+                    hideLoading();
+                    console.error('Ошибка подтверждения платежа:', error);
+                    showNotification('Ошибка подтверждения платежа. Попробуйте позже.', 'error');
+                }
+            }
+        }
+
+        // Показать сообщение об ожидании проверки
+        function showPendingMessage(method, message) {
+            const successMessage = document.getElementById('success-message');
+            successMessage.innerHTML = `
+                <div class="success-icon">⏳</div>
+                <h3>Платеж отправлен на проверку</h3>
+                <p><strong>Способ оплаты:</strong> ${method}</p>
+                <p>${message}</p>
+                <div style="margin-top: 1rem;">
+                    <a href="main.html" class="btn btn-primary">Вернуться на главную</a>
+                </div>
+            `;
+            successMessage.classList.add('show');
+        }
+
+        // Показать загрузку
+        function showLoading() {
+            document.getElementById('loading').classList.add('show');
+        }
+
+        // Скрыть загрузку
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('show');
+        }
+
+        // Показать уведомление
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 1rem;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                max-width: 300px;
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'var(--success-color)';
+            } else if (type === 'error') {
+                notification.style.background = 'var(--danger-color)';
+            } else {
+                notification.style.background = 'var(--accent-color)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Отмена платежа
+        function cancelPayment() {
+            if (confirm('Вы уверены, что хотите отменить оплату?')) {
+                window.history.back();
+            }
+        }
+    </script>
+</body>
+</html> 
