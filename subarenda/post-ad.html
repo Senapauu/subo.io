@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подать объявление - СубарендаМинск</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color), #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .form-container.show {
+            display: block;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, var(--accent-color), #2980b9);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+        }
+
+        .form-body {
+            padding: 2rem;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .form-group label.required::after {
+            content: " *";
+            color: var(--danger-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--danger-color);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Image Upload */
+        .image-upload-container {
+            border: 2px dashed var(--light-gray);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            position: relative;
+        }
+
+        .image-upload-container:hover {
+            border-color: var(--accent-color);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .image-upload-container.dragover {
+            border-color: var(--accent-color);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .image-preview-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item .remove-image {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview-item .remove-image:hover {
+            background: var(--danger-color);
+            transform: scale(1.1);
+        }
+
+        /* Amenities */
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .amenity-item:hover {
+            border-color: var(--accent-color);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .amenity-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-color);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--success-color));
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-gray);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #c0392b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--light-gray);
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, var(--success-color), #229954);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Субаренда<span>Минск</span></div>
+                <div class="nav-buttons">
+                    <a href="main.html" class="btn btn-secondary">← На главную</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Подать объявление</h1>
+                <p class="page-subtitle">Разместите вашу квартиру и начните зарабатывать</p>
+            </div>
+
+            <!-- Form Container -->
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>📝 Информация о квартире</h2>
+                    <p>Заполните все поля для публикации объявления</p>
+                </div>
+
+                <div class="form-body">
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">0% заполнено</div>
+                    </div>
+
+                    <form id="post-ad-form">
+                        <div class="form-grid">
+                            <!-- Основная информация -->
+                            <div class="form-section">
+                                <h3 class="section-title">📋 Основная информация</h3>
+                                
+                                <div class="form-group">
+                                    <label for="ad-title" class="required">Название объявления</label>
+                                    <input type="text" id="ad-title" class="form-control" placeholder="Например: Уютная 2-комнатная в центре" required>
+                                    <div class="error-message" id="title-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ad-district" class="required">Район</label>
+                                    <select id="ad-district" class="form-control" required>
+                                        <option value="">Выберите район</option>
+                                        <option value="central">Центральный</option>
+                                        <option value="soviet">Советский</option>
+                                        <option value="pervomaisky">Первомайский</option>
+                                        <option value="partisan">Партизанский</option>
+                                        <option value="zavodskoy">Заводской</option>
+                                        <option value="leninsky">Ленинский</option>
+                                        <option value="oktyabrsky">Октябрьский</option>
+                                        <option value="moskovsky">Московский</option>
+                                        <option value="frunzensky">Фрунзенский</option>
+                                    </select>
+                                    <div class="error-message" id="district-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ad-address" class="required">Адрес</label>
+                                    <input type="text" id="ad-address" class="form-control" placeholder="ул. Ленина, 15" required>
+                                    <div class="error-message" id="address-error"></div>
+                                </div>
+                            </div>
+
+                            <!-- Характеристики -->
+                            <div class="form-section">
+                                <h3 class="section-title">🏠 Характеристики</h3>
+                                
+                                <div class="form-group">
+                                    <label for="ad-rooms" class="required">Количество комнат</label>
+                                    <select id="ad-rooms" class="form-control" required>
+                                        <option value="">Выберите</option>
+                                        <option value="1">1 комната</option>
+                                        <option value="2">2 комнаты</option>
+                                        <option value="3">3 комнаты</option>
+                                        <option value="4">4 комнаты</option>
+                                        <option value="5">5+ комнат</option>
+                                    </select>
+                                    <div class="error-message" id="rooms-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ad-floor" class="required">Этаж</label>
+                                    <input type="text" id="ad-floor" class="form-control" placeholder="например: 5/9" required>
+                                    <div class="error-message" id="floor-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ad-area" class="required">Площадь</label>
+                                    <input type="text" id="ad-area" class="form-control" placeholder="например: 54 м²" required>
+                                    <div class="error-message" id="area-error"></div>
+                                </div>
+                            </div>
+
+                            <!-- Описание -->
+                            <div class="form-section full-width">
+                                <h3 class="section-title">📝 Описание</h3>
+                                <div class="form-group">
+                                    <label for="ad-description" class="required">Подробное описание</label>
+                                    <textarea id="ad-description" class="form-control" rows="5" placeholder="Опишите вашу квартиру, удобства, особенности, что включено в стоимость..." required></textarea>
+                                    <div class="error-message" id="description-error"></div>
+                                </div>
+                            </div>
+
+                            <!-- Фотографии -->
+                            <div class="form-section full-width">
+                                <h3 class="section-title">📷 Фотографии</h3>
+                                <div class="form-group">
+                                    <label class="required">Загрузите фотографии квартиры</label>
+                                    <div class="image-upload-container" id="image-upload-area">
+                                        <div class="upload-icon">📷</div>
+                                        <div class="upload-text">Нажмите или перетащите фотографии сюда</div>
+                                        <div class="upload-hint">Максимум 10 фото, до 5MB каждое</div>
+                                        <input type="file" id="ad-images" multiple accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="image-preview" id="image-preview"></div>
+                                    <div class="error-message" id="images-error"></div>
+                                </div>
+                            </div>
+
+                            <!-- Цена и контакты -->
+                            <div class="form-section">
+                                <h3 class="section-title">💰 Цена и условия</h3>
+                                
+                                <div class="form-group">
+                                    <label for="ad-price-type" class="required">Тип цены</label>
+                                    <select id="ad-price-type" class="form-control" required>
+                                        <option value="">Выберите тип цены</option>
+                                        <option value="fixed">Конкретная цена</option>
+                                        <option value="negotiable">Договорная</option>
+                                    </select>
+                                    <div class="error-message" id="price-type-error"></div>
+                                </div>
+                                
+                                <div class="form-group" id="price-input-group" style="display: none;">
+                                    <label for="ad-price" class="required">Цена за сутки (BYN)</label>
+                                    <input type="number" id="ad-price" class="form-control" placeholder="100" min="10">
+                                    <div class="error-message" id="price-error"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="ad-contact" class="required">Контактный телефон</label>
+                                    <input type="tel" id="ad-contact" class="form-control" placeholder="+375 (25) 123-45-67" required>
+                                    <div class="error-message" id="contact-error"></div>
+                                </div>
+                            </div>
+
+                            <!-- Удобства -->
+                            <div class="form-section">
+                                <h3 class="section-title">✨ Удобства</h3>
+                                <div class="amenities-grid">
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="wifi">
+                                        <span>Wi-Fi</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="air-conditioning">
+                                        <span>Кондиционер</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="washing-machine">
+                                        <span>Стиральная машина</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="refrigerator">
+                                        <span>Холодильник</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="tv">
+                                        <span>Телевизор</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="microwave">
+                                        <span>Микроволновка</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="balcony">
+                                        <span>Балкон</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="parking">
+                                        <span>Парковка</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="elevator">
+                                        <span>Лифт</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="security">
+                                        <span>Охрана</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="furnished">
+                                        <span>Меблирована</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="kitchen">
+                                        <span>Кухня</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="heating">
+                                        <span>Отопление</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="internet">
+                                        <span>Интернет</span>
+                                    </label>
+                                    <label class="amenity-item">
+                                        <input type="checkbox" value="bathroom">
+                                        <span>Санузел</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Координаты -->
+                            <div class="form-section">
+                                <h3 class="section-title">📍 Координаты на карте</h3>
+                                <p style="color: #666; margin-bottom: 1rem;">Укажите координаты для точного отображения на карте</p>
+                                
+                                <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                                    <div class="form-group">
+                                        <label for="ad-latitude">Широта (latitude)</label>
+                                        <input type="number" id="ad-latitude" class="form-control" placeholder="53.9006" step="0.0001" min="53.0" max="54.0">
+                                        <small style="color: #666;">Например: 53.9006 (центр Минска)</small>
+                                        <div class="error-message" id="latitude-error"></div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="ad-longitude">Долгота (longitude)</label>
+                                        <input type="number" id="ad-longitude" class="form-control" placeholder="27.5590" step="0.0001" min="27.0" max="28.0">
+                                        <small style="color: #666;">Например: 27.5590 (центр Минска)</small>
+                                        <div class="error-message" id="longitude-error"></div>
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">Очистить форму</button>
+                            <button type="submit" class="btn btn-success">📤 Отправить на модерацию</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Отправляем объявление на модерацию...</p>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="success-message">
+                <div class="success-icon">✅</div>
+                <h3>Объявление отправлено!</h3>
+                <p>Мы проверим ваше объявление в течение 24 часов и уведомим вас о результате.</p>
+                <div style="margin-top: 1rem;">
+                    <a href="main.html" class="btn btn-primary">Вернуться на главную</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Переменные
+        let uploadedImages = [];
+        let formProgress = 0;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeImageUpload();
+            initializeFormValidation();
+            updateProgress();
+        });
+
+        // Инициализация загрузки изображений
+        function initializeImageUpload() {
+            const imageUploadArea = document.getElementById('image-upload-area');
+            const imageInput = document.getElementById('ad-images');
+
+            // Клик по области загрузки
+            imageUploadArea.addEventListener('click', function() {
+                imageInput.click();
+            });
+
+            // Drag and drop
+            imageUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+
+            imageUploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+
+            imageUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                handleImageFiles(files);
+            });
+
+            // Выбор файлов
+            imageInput.addEventListener('change', function(e) {
+                handleImageFiles(e.target.files);
+            });
+        }
+
+        // Обработка загруженных файлов
+        function handleImageFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB
+                        showError('images-error', `Файл ${file.name} слишком большой. Максимальный размер: 5MB`);
+                        return;
+                    }
+                    
+                    if (uploadedImages.length >= 10) {
+                        showError('images-error', 'Максимум 10 фотографий');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImages.push({
+                            name: file.name,
+                            data: e.target.result
+                        });
+                        updateImagePreview();
+                        clearError('images-error');
+                        updateProgress();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    showError('images-error', `Файл ${file.name} не является изображением`);
+                }
+            });
+        }
+
+        // Обновление предварительного просмотра
+        function updateImagePreview() {
+            const imagePreview = document.getElementById('image-preview');
+            imagePreview.innerHTML = '';
+            
+            uploadedImages.forEach((image, index) => {
+                const item = document.createElement('div');
+                item.className = 'image-preview-item';
+                item.innerHTML = `
+                    <img src="${image.data}" alt="${image.name}">
+                    <button class="remove-image" onclick="removeImage(${index})">&times;</button>
+                `;
+                imagePreview.appendChild(item);
+            });
+        }
+
+        // Удаление изображения
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            updateImagePreview();
+            updateProgress();
+        }
+
+        // Инициализация валидации формы
+        function initializeFormValidation() {
+            const form = document.getElementById('post-ad-form');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    validateField(this);
+                    updateProgress();
+                });
+                
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+            });
+
+            // Обработчик для выбора типа цены
+            document.getElementById('ad-price-type').addEventListener('change', function() {
+                const priceType = this.value;
+                const priceInputGroup = document.getElementById('price-input-group');
+                const priceInput = document.getElementById('ad-price');
+                
+                if (priceType === 'fixed') {
+                    priceInputGroup.style.display = 'block';
+                    priceInput.required = true;
+                } else if (priceType === 'negotiable') {
+                    priceInputGroup.style.display = 'none';
+                    priceInput.required = false;
+                    priceInput.value = '';
+                }
+                
+                validateField(this);
+                updateProgress();
+            });
+
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        // Валидация поля
+        function validateField(field) {
+            const fieldId = field.id;
+            const value = field.value.trim();
+            let isValid = true;
+            let errorMessage = '';
+
+            switch (fieldId) {
+                case 'ad-title':
+                    if (!value) {
+                        errorMessage = 'Введите название объявления';
+                        isValid = false;
+                    } else if (value.length < 10) {
+                        errorMessage = 'Название должно содержать минимум 10 символов';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-district':
+                    if (!value) {
+                        errorMessage = 'Выберите район';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-address':
+                    if (!value) {
+                        errorMessage = 'Введите адрес';
+                        isValid = false;
+                    } else if (value.length < 5) {
+                        errorMessage = 'Адрес должен содержать минимум 5 символов';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-rooms':
+                    if (!value) {
+                        errorMessage = 'Выберите количество комнат';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-floor':
+                    if (!value) {
+                        errorMessage = 'Введите этаж';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-area':
+                    if (!value) {
+                        errorMessage = 'Введите площадь';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-description':
+                    if (!value) {
+                        errorMessage = 'Введите описание';
+                        isValid = false;
+                    } else if (value.length < 20) {
+                        errorMessage = 'Описание должно содержать минимум 20 символов';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-price-type':
+                    if (!value) {
+                        errorMessage = 'Выберите тип цены';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 'ad-price':
+                    const priceType = document.getElementById('ad-price-type').value;
+                    if (priceType === 'fixed' && !value) {
+                        errorMessage = 'Введите цену';
+                        isValid = false;
+                    } else if (priceType === 'fixed' && value < 10) {
+                        errorMessage = 'Цена должна быть не менее 10 BYN';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'ad-contact':
+                    if (!value) {
+                        errorMessage = 'Введите контактный телефон';
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (isValid) {
+                field.classList.remove('error');
+                clearError(fieldId + '-error');
+            } else {
+                field.classList.add('error');
+                showError(fieldId + '-error', errorMessage);
+            }
+
+            return isValid;
+        }
+
+        // Показать ошибку
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+            }
+        }
+
+        // Очистить ошибку
+        function clearError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        }
+
+        // Обновление прогресса
+        function updateProgress() {
+            const form = document.getElementById('post-ad-form');
+            const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let filledFields = 0;
+            let totalFields = requiredFields.length + 1; // +1 для изображений
+
+            requiredFields.forEach(field => {
+                if (field.value.trim()) {
+                    filledFields++;
+                }
+            });
+
+            // Проверяем изображения
+            if (uploadedImages.length > 0) {
+                filledFields++;
+            }
+
+            formProgress = Math.round((filledFields / totalFields) * 100);
+            
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            
+            progressFill.style.width = formProgress + '%';
+            progressText.textContent = formProgress + '% заполнено';
+        }
+
+        // Обработка отправки формы
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            // Проверяем авторизацию
+            const userData = localStorage.getItem('realtUser');
+            if (!userData) {
+                alert('Необходимо войти в систему');
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            // Валидация всех полей
+            const form = document.getElementById('post-ad-form');
+            const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+
+            // Проверка изображений
+            if (uploadedImages.length === 0) {
+                showError('images-error', 'Загрузите хотя бы одну фотографию');
+                isValid = false;
+            } else {
+                clearError('images-error');
+            }
+
+            if (!isValid) {
+                alert('Пожалуйста, исправьте ошибки в форме');
+                return;
+            }
+
+            // Показываем загрузку
+            showLoading();
+
+            // Собираем данные формы
+            const user = JSON.parse(userData);
+            const selectedAmenities = Array.from(document.querySelectorAll('.amenity-item input:checked')).map(cb => cb.value);
+
+            const priceType = document.getElementById('ad-price-type').value;
+            const price = priceType === 'fixed' ? document.getElementById('ad-price').value : 'Договорная';
+            
+            // Сначала загружаем изображения на сервер
+            let imageUrls = [];
+            
+            if (uploadedImages.length > 0) {
+                try {
+                    const uploadResponse = await fetch('upload_images.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            images: uploadedImages.map(img => img.data)
+                        })
+                    });
+                    
+                    const uploadResult = await uploadResponse.json();
+                    if (uploadResult.success) {
+                        imageUrls = uploadResult.images;
+                    } else {
+                        throw new Error(uploadResult.message || 'Ошибка загрузки изображений');
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки изображений:', error);
+                    alert('Ошибка загрузки изображений: ' + error.message);
+                    return;
+                }
+            } else {
+                imageUrls = ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop'];
+            }
+            
+            // Получаем координаты из формы или используем центр Минска
+            const latitude = document.getElementById('ad-latitude').value || 53.9006;
+            const longitude = document.getElementById('ad-longitude').value || 27.5590;
+            
+            const coordinates = {
+                latitude: parseFloat(latitude),
+                longitude: parseFloat(longitude)
+            };
+            
+            const formData = {
+                id: Date.now(),
+                userId: user.email,
+                dealType: 'rent-daily', // Default to rent-daily for now, as deal type selection is removed
+                title: document.getElementById('ad-title').value.trim(),
+                district: document.getElementById('ad-district').value,
+                address: document.getElementById('ad-address').value.trim(),
+                rooms: document.getElementById('ad-rooms').value,
+                floor: document.getElementById('ad-floor').value.trim(),
+                area: document.getElementById('ad-area').value.trim(),
+                description: document.getElementById('ad-description').value.trim(),
+                images: imageUrls,
+                latitude: coordinates.latitude,
+                longitude: coordinates.longitude,
+                price: price,
+                priceType: priceType,
+                contact: document.getElementById('ad-contact').value.trim(),
+                amenities: selectedAmenities,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                moderated: false
+            };
+
+            // Отправляем данные на сервер
+            fetch('api.php?action=create_apartment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideLoading();
+                
+                if (data.success) {
+                    showSuccess();
+                    // Очищаем форму после успешной отправки
+                    setTimeout(() => {
+                        resetForm();
+                    }, 3000);
+                } else {
+                    alert(data.message || 'Ошибка при отправке объявления');
+                }
+            })
+            .catch(error => {
+                hideLoading();
+                console.error('Ошибка отправки:', error);
+                alert('Ошибка соединения с сервером');
+            });
+        }
+
+        // Показать загрузку
+        function showLoading() {
+            document.getElementById('loading').classList.add('show');
+            document.querySelector('.form-container').style.display = 'none';
+        }
+
+        // Скрыть загрузку
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('show');
+        }
+
+        // Показать успех
+        function showSuccess() {
+            document.getElementById('success-message').classList.add('show');
+        }
+
+        // Определение текущего местоположения
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '📍 Определяем...';
+                button.disabled = true;
+                
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        
+                        document.getElementById('ad-latitude').value = latitude.toFixed(4);
+                        document.getElementById('ad-longitude').value = longitude.toFixed(4);
+                        
+                        button.textContent = '✅ Координаты определены!';
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.disabled = false;
+                        }, 2000);
+                        
+                        updateProgress();
+                    },
+                    function(error) {
+                        console.error('Ошибка получения местоположения:', error);
+                        alert('Не удалось определить местоположение. Введите координаты вручную.');
+                        button.textContent = originalText;
+                        button.disabled = false;
+                    }
+                );
+            } else {
+                alert('Геолокация не поддерживается вашим браузером. Введите координаты вручную.');
+            }
+        }
+
+        // Сброс формы
+        function resetForm() {
+            if (confirm('Вы уверены, что хотите очистить форму?')) {
+                document.getElementById('post-ad-form').reset();
+                uploadedImages = [];
+                updateImagePreview();
+                
+                // Очищаем ошибки
+                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+                document.querySelectorAll('.form-control').forEach(el => el.classList.remove('error'));
+                
+                updateProgress();
+            }
+        }
+    </script>
+</body>
+</html> 

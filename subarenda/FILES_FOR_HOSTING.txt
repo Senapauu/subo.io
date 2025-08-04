@@ -1,0 +1,52 @@
+СПИСОК ФАЙЛОВ ДЛЯ ЗАГРУЗКИ НА ХОСТИНГ
+==========================================
+
+ОСНОВНЫЕ HTML ФАЙЛЫ:
+- main.html (главная страница)
+- auth.html (авторизация)
+- admin.html (админ-панель)
+- admin-login.html (вход для админа)
+- payment.html (оплата)
+- personal-account.html (личный кабинет)
+- my-bookings.html (мои бронирования)
+- bookings-management.html (управление бронированиями)
+- edit-apartment.html (редактирование квартиры)
+- post-ad.html (добавление квартиры)
+- privacy-policy.html (политика конфиденциальности)
+- terms-of-service.html (пользовательское соглашение)
+
+PHP ФАЙЛЫ:
+- api.php (основной API)
+- config.php (конфигурация - НАСТРОИТЬ!)
+- payment_config.php (конфигурация платежей)
+- payment_notifications.php (уведомления)
+- erip_api.php (API для ERIP)
+- belkart_api.php (API для Belkart)
+- erip-webhook.php (вебхук для ERIP)
+- upload_images.php (загрузка изображений)
+
+КОНФИГУРАЦИОННЫЕ ФАЙЛЫ:
+- .htaccess (настройки сервера)
+- database.sql (структура базы данных)
+
+ПАПКИ:
+- uploads/ (для загруженных файлов)
+
+ДОКУМЕНТАЦИЯ:
+- HOSTING_SETUP.md (подробная инструкция)
+- QUICK_HOSTING_GUIDE.md (быстрая инструкция)
+- CHECKLIST_HOSTING.md (чек-лист)
+- config_hosting.php (шаблон конфигурации)
+
+АРХИВ:
+- subarenda_site.zip (все файлы в архиве)
+
+ВАЖНО:
+1. После загрузки НАСТРОЙТЕ config.php с данными хостинга
+2. Импортируйте database.sql в базу данных
+3. Создайте папку uploads/ с правами на запись
+4. Проверьте работу всех функций
+
+ДАННЫЕ ДЛЯ ВХОДА В АДМИН-ПАНЕЛЬ:
+- Email: admin@subarenda.by
+- Пароль: admin123 
