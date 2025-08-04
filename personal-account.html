@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой личный кабинет - Субаренда Минск</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #e67e22;
+            --danger-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: white;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(52, 152, 219, 0.1) 0%, rgba(52, 73, 94, 0.1) 100%);
+            pointer-events: none;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        .back-btn {
+            background: linear-gradient(45deg, var(--accent-color), #2980b9);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(45deg, #2980b9, var(--accent-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger-color), #c0392b);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .logout-btn:hover {
+            background: linear-gradient(45deg, #c0392b, var(--danger-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            border-radius: 2px;
+        }
+        
+        .personal-account-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+            gap: 0.5rem;
+        }
+        
+        .personal-tab {
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .personal-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .personal-tab:hover::before {
+            left: 100%;
+        }
+        
+        .personal-tab.active {
+            color: white;
+            background: linear-gradient(45deg, var(--accent-color), #2980b9);
+            border-color: var(--accent-color);
+            box-shadow: 0 6px 25px rgba(52, 152, 219, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .personal-tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .personal-tab-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+        }
+        
+        .personal-tab-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .profile-info, .bookings-info, .apartments-info, .settings-info {
+            margin-bottom: 2rem;
+        }
+        
+        .profile-info h3, .bookings-info h3, .apartments-info h3, .settings-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .profile-details {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .profile-detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-detail-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .profile-detail-value {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .bookings-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .booking-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .booking-id {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .booking-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-size: 1rem;
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+        
+        .btn-confirm {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-confirm:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .btn-contact {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-contact:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .contact-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .contact-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .contact-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .contact-info {
+            margin-bottom: 1rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .contact-label {
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .contact-value {
+            color: #333;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-color), #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #2980b9, var(--accent-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .settings-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid rgba(52, 152, 219, 0.1);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-actions {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--secondary-color);
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+        }
+        
+                 .empty-state h4 {
+             margin-bottom: 1rem;
+             color: var(--primary-color);
+         }
+         
+         /* Стили для квартир пользователя */
+         .user-apartment-item {
+             background: white;
+             border: 1px solid #e9ecef;
+             border-radius: 12px;
+             padding: 1.5rem;
+             margin-bottom: 1rem;
+             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+             transition: all 0.3s ease;
+         }
+         
+         .user-apartment-item:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+         }
+         
+         .user-apartment-title {
+             font-size: 1.2rem;
+             font-weight: 600;
+             color: var(--primary-color);
+             margin-bottom: 0.5rem;
+         }
+         
+         .user-apartment-details {
+             color: var(--secondary-color);
+             margin-bottom: 1rem;
+             font-size: 0.9rem;
+         }
+         
+         .user-apartment-status {
+             margin-bottom: 1rem;
+         }
+         
+         .status-badge {
+             padding: 0.4rem 0.8rem;
+             border-radius: 20px;
+             font-size: 0.8rem;
+             font-weight: 600;
+             text-transform: uppercase;
+         }
+         
+         .status-badge.available {
+             background: linear-gradient(45deg, var(--success-color), #2ecc71);
+             color: white;
+         }
+         
+         .status-badge.pending {
+             background: linear-gradient(45deg, var(--warning-color), #f39c12);
+             color: white;
+         }
+         
+         .status-badge.booked {
+             background: linear-gradient(45deg, var(--danger-color), #e74c3c);
+             color: white;
+         }
+         
+         .user-apartment-actions {
+             display: flex;
+             gap: 0.5rem;
+             flex-wrap: wrap;
+         }
+         
+         .btn-secondary {
+             background: linear-gradient(45deg, var(--secondary-color), #34495e);
+             color: white;
+             box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3);
+         }
+         
+         .btn-secondary:hover {
+             background: linear-gradient(45deg, #34495e, var(--secondary-color));
+             transform: translateY(-2px);
+             box-shadow: 0 6px 20px rgba(52, 73, 94, 0.4);
+         }
+         
+         .btn-danger {
+             background: linear-gradient(45deg, var(--danger-color), #c0392b);
+             color: white;
+             box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+         }
+         
+         .btn-danger:hover {
+             background: linear-gradient(45deg, #c0392b, var(--danger-color));
+             transform: translateY(-2px);
+             box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+         }
+        
+        @media (max-width: 768px) {
+            .personal-account-tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .personal-tab {
+                margin: 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">Субаренда<span>Минск</span></div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="main.html" class="back-btn">← Вернуться на главную</a>
+                <button class="logout-btn" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container main-content">
+        <h1 class="page-title">👤 Мой личный кабинет</h1>
+        
+        <div class="personal-account-tabs">
+            <button class="personal-tab active" data-tab="profile">👤 Профиль</button>
+            <button class="personal-tab" data-tab="my-bookings">📅 Мои бронирования</button>
+            <button class="personal-tab" data-tab="booking-requests">📋 Заявки на мои квартиры</button>
+            <button class="personal-tab" data-tab="apartments">🏠 Мои квартиры</button>
+            <button class="personal-tab" data-tab="settings">⚙️ Настройки</button>
+        </div>
+        
+        <div class="personal-tab-content active" id="profile-tab">
+            <div class="profile-info">
+                <h3>Информация о профиле</h3>
+                <div class="profile-details" id="profile-details">
+                    <!-- Информация о профиле будет загружена через JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="personal-tab-content" id="my-bookings-tab">
+            <div class="bookings-info">
+                <h3>📅 Мои бронирования</h3>
+                <div class="bookings-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-my-bookings">0</span>
+                        <span class="stat-label">Всего</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="pending-my-bookings">0</span>
+                        <span class="stat-label">Ожидают</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="confirmed-my-bookings">0</span>
+                        <span class="stat-label">Подтверждено</span>
+                    </div>
+                </div>
+                <div id="my-bookings-list">
+                    <div class="loading">Загрузка бронирований...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="personal-tab-content" id="booking-requests-tab">
+            <div class="booking-requests-info">
+                <h3>📋 Заявки на мои квартиры</h3>
+                <div class="bookings-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-requests">0</span>
+                        <span class="stat-label">Всего заявок</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="pending-requests">0</span>
+                        <span class="stat-label">Ожидают</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="confirmed-requests">0</span>
+                        <span class="stat-label">Подтверждено</span>
+                    </div>
+                </div>
+                <div id="booking-requests-list">
+                    <div class="loading">Загрузка заявок...</div>
+                </div>
+            </div>
+        </div>
+        
+                 <div class="personal-tab-content" id="apartments-tab">
+             <div class="apartments-info">
+                 <h3>Мои квартиры</h3>
+                 <div id="my-apartments-list">
+                     <!-- Квартиры будут загружены через JavaScript -->
+                 </div>
+                 <div style="text-align: center; margin-top: 2rem;">
+                     <a href="post-ad.html" class="btn btn-primary">+ Добавить новую квартиру</a>
+                 </div>
+             </div>
+         </div>
+        
+        <div class="personal-tab-content" id="settings-tab">
+            <div class="settings-info">
+                <h3>⚙️ Настройки аккаунта</h3>
+                <form id="settings-form" class="settings-form">
+                    <div class="form-group">
+                        <label for="settings-name">Имя</label>
+                        <input type="text" id="settings-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="settings-email">Email</label>
+                        <input type="email" id="settings-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="settings-phone">Телефон</label>
+                        <input type="tel" id="settings-phone" placeholder="+375 (25) 123-45-67">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно для контактов -->
+    <div id="contact-modal" class="contact-modal">
+        <div class="contact-modal-content">
+            <div class="contact-modal-header">
+                <h3>📞 Контакты гостя</h3>
+                <button class="contact-modal-close" onclick="closeContactModal()">&times;</button>
+            </div>
+            <div id="contact-info" class="contact-info">
+                <!-- Контактная информация будет загружена через JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Проверяем авторизацию пользователя
+        function checkAuth() {
+            const userData = localStorage.getItem('realtUser');
+            if (!userData) {
+                alert('Необходимо войти в систему');
+                window.location.href = 'main.html';
+                return false;
+            }
+            return true;
+        }
+        
+        // Загружаем данные личного кабинета
+        function loadPersonalAccountData() {
+            if (!checkAuth()) return;
+            
+            const userData = localStorage.getItem('realtUser');
+            const user = JSON.parse(userData);
+            
+            // Загружаем данные профиля
+            const profileDetails = document.getElementById('profile-details');
+            profileDetails.innerHTML = `
+                <div class="profile-detail-item">
+                    <span class="profile-detail-label">Имя:</span>
+                    <span class="profile-detail-value">${user.name || 'Не указано'}</span>
+                </div>
+                <div class="profile-detail-item">
+                    <span class="profile-detail-label">Email:</span>
+                    <span class="profile-detail-value">${user.email || 'Не указано'}</span>
+                </div>
+                <div class="profile-detail-item">
+                    <span class="profile-detail-label">Телефон:</span>
+                    <span class="profile-detail-value">${user.phone || 'Не указано'}</span>
+                </div>
+                <div class="profile-detail-item">
+                    <span class="profile-detail-label">Дата регистрации:</span>
+                    <span class="profile-detail-value">${user.registrationTime ? new Date(user.registrationTime).toLocaleDateString() : 'Не указано'}</span>
+                </div>
+                <div class="profile-detail-item">
+                    <span class="profile-detail-label">Последний вход:</span>
+                    <span class="profile-detail-value">${user.loginTime ? new Date(user.loginTime).toLocaleDateString() : 'Не указано'}</span>
+                </div>
+            `;
+            
+            // Заполняем форму настроек
+            document.getElementById('settings-name').value = user.name || '';
+            document.getElementById('settings-email').value = user.email || '';
+            document.getElementById('settings-phone').value = user.phone || '';
+        }
+        
+        // Обработчики для вкладок
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('personal-tab')) {
+                const tabName = e.target.getAttribute('data-tab');
+                switchPersonalTab(tabName);
+            }
+        });
+        
+        function switchPersonalTab(tabName) {
+            // Убираем активный класс у всех вкладок
+            document.querySelectorAll('.personal-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.personal-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Добавляем активный класс к выбранной вкладке
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+        
+        // Обработчик формы настроек
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userData = localStorage.getItem('realtUser');
+            if (userData) {
+                const user = JSON.parse(userData);
+                
+                const updatedData = {
+                    name: document.getElementById('settings-name').value,
+                    email: document.getElementById('settings-email').value,
+                    phone: document.getElementById('settings-phone').value
+                };
+                
+                // Отправляем данные на сервер
+                fetch('api.php?action=update_user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: user.id,
+                        ...updatedData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Обновляем данные в localStorage
+                        Object.assign(user, updatedData);
+                        localStorage.setItem('realtUser', JSON.stringify(user));
+                        alert('Настройки успешно сохранены!');
+                        
+                        // Перезагружаем данные
+                        loadPersonalAccountData();
+                    } else {
+                        alert(data.message || 'Ошибка при сохранении настроек');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка сохранения:', error);
+                    alert('Ошибка соединения с сервером');
+                });
+            }
+        });
+        
+        // Функция выхода из аккаунта
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
+                // Отправляем запрос на сервер для выхода
+                fetch('api.php?action=logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(() => {
+                    localStorage.removeItem('realtUser');
+                    alert('Вы успешно вышли из аккаунта');
+                    window.location.href = 'main.html';
+                })
+                .catch(error => {
+                    console.error('Ошибка выхода:', error);
+                    // Выходим локально даже при ошибке сервера
+                    localStorage.removeItem('realtUser');
+                    alert('Вы успешно вышли из аккаунта');
+                    window.location.href = 'main.html';
+                });
+            }
+        }
+        
+        // Функция загрузки квартир пользователя
+        async function loadUserApartments() {
+            try {
+                const result = await apiRequest('get_user_apartments');
+                const container = document.getElementById('my-apartments-list');
+                
+                if (result.success && result.data) {
+                    const userApartments = result.data;
+                    
+                    if (userApartments.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🏠</div>
+                                <h4>У вас пока нет квартир</h4>
+                                <p>Добавьте свою первую квартиру для сдачи в аренду</p>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = userApartments.map(apartment => `
+                            <div class="user-apartment-item">
+                                <div class="user-apartment-title">${apartment.title}</div>
+                                <div class="user-apartment-details">
+                                    ${apartment.address} • ${apartment.rooms} комн. • ${apartment.area} м²
+                                </div>
+                                <div class="user-apartment-status">
+                                    <span class="status-badge ${apartment.status}">${apartment.status === 'available' ? 'Одобрена' : apartment.status === 'pending' ? 'На модерации' : 'Забронирована'}</span>
+                                </div>
+                                <div class="user-apartment-actions">
+                                    <button class="btn btn-secondary" onclick="editUserApartment(${apartment.id})">Редактировать</button>
+                                    <button class="btn btn-primary" onclick="viewUserApartment(${apartment.id})">Просмотр</button>
+                                    <button class="btn btn-danger" onclick="deleteUserApartment(${apartment.id})">Удалить</button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">❌</div>
+                            <h4>Ошибка загрузки</h4>
+                            <p>Не удалось загрузить ваши квартиры</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки квартир пользователя:', error);
+                const container = document.getElementById('my-apartments-list');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <h4>Ошибка загрузки</h4>
+                        <p>Не удалось загрузить ваши квартиры</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Функция для API запросов
+        async function apiRequest(action, data = null) {
+            const url = data ? `api.php?action=${action}` : `api.php?action=${action}`;
+            const options = {
+                method: data ? 'POST' : 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+            
+            if (data) {
+                options.body = JSON.stringify(data);
+            }
+            
+            const response = await fetch(url, options);
+            return await response.json();
+        }
+
+                 // Функция просмотра квартиры
+         function viewUserApartment(apartmentId) {
+             // Переходим на главную страницу и открываем модальное окно квартиры
+             window.location.href = `main.html#apartment-${apartmentId}`;
+         }
+         
+         // Функция редактирования квартиры
+         function editUserApartment(apartmentId) {
+             window.location.href = `edit-apartment.html?id=${apartmentId}`;
+         }
+         
+         // Функция удаления квартиры
+         async function deleteUserApartment(apartmentId) {
+             if (confirm('Вы уверены, что хотите удалить эту квартиру? Это действие нельзя отменить.')) {
+                 try {
+                     const result = await apiRequest('delete_apartment', { apartment_id: apartmentId });
+                     
+                     if (result.success) {
+                         alert('Квартира успешно удалена!');
+                         // Перезагружаем список квартир
+                         loadUserApartments();
+                     } else {
+                         alert(result.message || 'Ошибка при удалении квартиры');
+                     }
+                 } catch (error) {
+                     console.error('Ошибка удаления квартиры:', error);
+                     alert('Ошибка соединения с сервером');
+                 }
+             }
+         }
+         
+                 // Загружаем данные при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPersonalAccountData();
+            loadUserApartments(); // Добавляем загрузку квартир
+            loadMyBookings(); // Загружаем мои бронирования
+            loadBookingRequests(); // Загружаем заявки на мои квартиры
+            
+            // Проверяем хэш для перехода на конкретную вкладку
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                switchPersonalTab(hash);
+            }
+        });
+        
+        // Функция для загрузки моих бронирований
+        async function loadMyBookings() {
+            try {
+                const response = await fetch('api.php?action=get_bookings');
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayMyBookings(result.data);
+                    updateMyBookingsStats(result.data);
+                } else {
+                    document.getElementById('my-bookings-list').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">❌</div>
+                            <h4>Ошибка загрузки</h4>
+                            <p>${result.message || 'Не удалось загрузить бронирования'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки моих бронирований:', error);
+                document.getElementById('my-bookings-list').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <h4>Ошибка загрузки</h4>
+                        <p>Не удалось загрузить бронирования</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Функция для отображения моих бронирований
+        function displayMyBookings(bookings) {
+            const container = document.getElementById('my-bookings-list');
+            
+            if (bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <h4>У вас пока нет бронирований</h4>
+                        <p>После того как вы забронируете квартиру, она появится здесь</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = bookings.map(booking => `
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div class="booking-id">Бронирование #${booking.id}</div>
+                        <div class="booking-status status-${booking.status}">${getStatusText(booking.status)}</div>
+                    </div>
+                    
+                    <div class="booking-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Квартира</div>
+                            <div class="detail-value">${booking.apartment_title}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Адрес</div>
+                            <div class="detail-value">${booking.apartment_address}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Даты</div>
+                            <div class="detail-value">${formatDate(booking.check_in)} - ${formatDate(booking.check_out)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Ночей</div>
+                            <div class="detail-value">${booking.nights}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Гостей</div>
+                            <div class="detail-value">${booking.guests}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Сумма</div>
+                            <div class="detail-value">${booking.total_amount} BYN</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Создано</div>
+                            <div class="detail-value">${formatDateTime(booking.created_at)}</div>
+                        </div>
+                    </div>
+                    
+                    ${booking.message ? `
+                        <div class="detail-item" style="margin-bottom: 1rem;">
+                            <div class="detail-label">Ваше сообщение</div>
+                            <div class="detail-value">${booking.message}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="booking-actions">
+                        ${booking.status === 'pending' ? `
+                            <button class="btn-small btn-cancel" onclick="cancelMyBooking(${booking.id})">
+                                Отменить бронирование
+                            </button>
+                        ` : ''}
+                        <button class="btn-small btn-view" onclick="viewApartment(${booking.apartment_id})">
+                            Посмотреть квартиру
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Функция для обновления статистики моих бронирований
+        function updateMyBookingsStats(bookings) {
+            const total = bookings.length;
+            const pending = bookings.filter(b => b.status === 'pending').length;
+            const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+
+            document.getElementById('total-my-bookings').textContent = total;
+            document.getElementById('pending-my-bookings').textContent = pending;
+            document.getElementById('confirmed-my-bookings').textContent = confirmed;
+        }
+        
+        // Функция для загрузки заявок на мои квартиры
+        async function loadBookingRequests() {
+            try {
+                const response = await fetch('api.php?action=get_owner_bookings');
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayBookingRequests(result.data);
+                    updateBookingRequestsStats(result.data);
+                } else {
+                    document.getElementById('booking-requests-list').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">❌</div>
+                            <h4>Ошибка загрузки</h4>
+                            <p>${result.message || 'Не удалось загрузить заявки'}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки заявок:', error);
+                document.getElementById('booking-requests-list').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❌</div>
+                        <h4>Ошибка загрузки</h4>
+                        <p>Не удалось загрузить заявки</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Функция для отображения заявок на мои квартиры
+        function displayBookingRequests(bookings) {
+            const container = document.getElementById('booking-requests-list');
+            
+            if (bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <h4>Нет заявок на ваши квартиры</h4>
+                        <p>Когда появятся заявки на ваши квартиры, они отобразятся здесь</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = bookings.map(booking => `
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div class="booking-id">Заявка #${booking.id}</div>
+                        <div class="booking-status status-${booking.status}">${getStatusText(booking.status)}</div>
+                    </div>
+                    
+                    <div class="booking-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Квартира</div>
+                            <div class="detail-value">${booking.apartment_title}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Гость</div>
+                            <div class="detail-value">${booking.name}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Телефон</div>
+                            <div class="detail-value">${booking.phone}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Даты</div>
+                            <div class="detail-value">${formatDate(booking.check_in)} - ${formatDate(booking.check_out)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Ночей</div>
+                            <div class="detail-value">${booking.nights}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Гостей</div>
+                            <div class="detail-value">${booking.guests}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Сумма</div>
+                            <div class="detail-value">${booking.total_amount} BYN</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Создано</div>
+                            <div class="detail-value">${formatDateTime(booking.created_at)}</div>
+                        </div>
+                    </div>
+                    
+                    ${booking.message ? `
+                        <div class="detail-item" style="margin-bottom: 1rem;">
+                            <div class="detail-label">Сообщение от гостя</div>
+                            <div class="detail-value">${booking.message}</div>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="booking-actions">
+                        ${booking.status === 'pending' ? `
+                            <button class="btn-small btn-confirm" onclick="confirmBooking(${booking.id})">
+                                Подтвердить
+                            </button>
+                            <button class="btn-small btn-cancel" onclick="cancelBooking(${booking.id})">
+                                Отклонить
+                            </button>
+                        ` : ''}
+                        <button class="btn-small btn-contact" onclick="showContactInfo(${booking.id})">
+                            Контакты гостя
+                        </button>
+                        <button class="btn-small btn-view" onclick="viewApartment(${booking.apartment_id})">
+                            Посмотреть квартиру
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Функция для обновления статистики заявок
+        function updateBookingRequestsStats(bookings) {
+            const total = bookings.length;
+            const pending = bookings.filter(b => b.status === 'pending').length;
+            const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+
+            document.getElementById('total-requests').textContent = total;
+            document.getElementById('pending-requests').textContent = pending;
+            document.getElementById('confirmed-requests').textContent = confirmed;
+        }
+        
+        // Функция для подтверждения бронирования
+        async function confirmBooking(bookingId) {
+            if (!confirm('Подтвердить это бронирование?')) return;
+            
+            try {
+                const response = await fetch('api.php?action=update_booking_status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        booking_id: bookingId,
+                        status: 'confirmed'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Бронирование подтверждено!');
+                    loadBookingRequests(); // Перезагружаем список
+                } else {
+                    alert(result.message || 'Ошибка подтверждения');
+                }
+            } catch (error) {
+                console.error('Ошибка подтверждения:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+        
+        // Функция для отмены бронирования (для владельца)
+        async function cancelBooking(bookingId) {
+            if (!confirm('Отклонить это бронирование?')) return;
+            
+            try {
+                const response = await fetch('api.php?action=update_booking_status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        booking_id: bookingId,
+                        status: 'cancelled'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Бронирование отклонено');
+                    loadBookingRequests(); // Перезагружаем список
+                } else {
+                    alert(result.message || 'Ошибка отклонения');
+                }
+            } catch (error) {
+                console.error('Ошибка отклонения:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+        
+        // Функция для отмены моего бронирования
+        async function cancelMyBooking(bookingId) {
+            if (!confirm('Вы уверены, что хотите отменить это бронирование?')) return;
+            
+            try {
+                const response = await fetch('api.php?action=update_booking_status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        booking_id: bookingId,
+                        status: 'cancelled'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Бронирование отменено');
+                    loadMyBookings(); // Перезагружаем список
+                } else {
+                    alert(result.message || 'Ошибка отмены');
+                }
+            } catch (error) {
+                console.error('Ошибка отмены:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+        
+        // Функция для показа контактов гостя
+        async function showContactInfo(bookingId) {
+            try {
+                const response = await fetch(`api.php?action=get_booking&id=${bookingId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const booking = result.data;
+                    const contactInfo = document.getElementById('contact-info');
+                    
+                    contactInfo.innerHTML = `
+                        <div class="contact-item">
+                            <span class="contact-label">Имя:</span>
+                            <span class="contact-value">${booking.name}</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Телефон:</span>
+                            <span class="contact-value">${booking.phone}</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Email:</span>
+                            <span class="contact-value">${booking.email || 'Не указан'}</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Даты бронирования:</span>
+                            <span class="contact-value">${formatDate(booking.check_in)} - ${formatDate(booking.check_out)}</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-label">Количество гостей:</span>
+                            <span class="contact-value">${booking.guests}</span>
+                        </div>
+                        ${booking.message ? `
+                            <div class="contact-item">
+                                <span class="contact-label">Сообщение:</span>
+                                <span class="contact-value">${booking.message}</span>
+                            </div>
+                        ` : ''}
+                    `;
+                    
+                    document.getElementById('contact-modal').style.display = 'block';
+                } else {
+                    alert('Не удалось загрузить информацию о бронировании');
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки контактов:', error);
+                alert('Ошибка подключения к серверу');
+            }
+        }
+        
+        // Функция для закрытия модального окна контактов
+        function closeContactModal() {
+            document.getElementById('contact-modal').style.display = 'none';
+        }
+        
+        // Функция для просмотра квартиры
+        function viewApartment(apartmentId) {
+            window.location.href = `main.html#apartment-${apartmentId}`;
+        }
+        
+        // Вспомогательные функции
+        function getStatusText(status) {
+            const statuses = {
+                'pending': 'Ожидает подтверждения',
+                'confirmed': 'Подтверждено',
+                'cancelled': 'Отменено'
+            };
+            return statuses[status] || status;
+        }
+        
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('ru-RU');
+        }
+        
+        function formatDateTime(dateString) {
+            return new Date(dateString).toLocaleString('ru-RU');
+        }
+    </script>
+</body>
+</html> 

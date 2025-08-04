@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - СубарендаМинск</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .admin-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background: #34495e;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .tabs-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .tabs-header {
+            display: flex;
+            background: #ecf0f1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-button {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #2c3e50;
+            border-bottom-color: #3498db;
+        }
+
+        .tab-button:hover {
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-available {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-booked {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-rejected {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pagination button.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .pagination button:hover {
+            background: #f8f9fa;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .detail-value {
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🏠 Админ-панель СубарендаМинск</div>
+        <div class="admin-nav">
+            <a href="main.html">← На главную</a>
+            <a href="#" onclick="logout()">Выйти</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">📊 Панель управления</h1>
+
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="total-apartments">0</div>
+                <div class="stat-label">Всего квартир</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pending-apartments">0</div>
+                <div class="stat-label">На модерации</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-users">0</div>
+                <div class="stat-label">Пользователей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-bookings">0</div>
+                <div class="stat-label">Бронирований</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-payments">0</div>
+                <div class="stat-label">Платежей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-revenue">0.00</div>
+                <div class="stat-label">Общий доход (BYN)</div>
+            </div>
+        </div>
+
+        <!-- Вкладки -->
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-button active" onclick="showTab('apartments')">🏠 Квартиры</button>
+                <button class="tab-button" onclick="showTab('users')">👥 Пользователи</button>
+                <button class="tab-button" onclick="showTab('bookings')">📅 Бронирования</button>
+                <button class="tab-button" onclick="showTab('payments')">💰 Платежи</button>
+            </div>
+
+            <!-- Вкладка Квартиры -->
+            <div id="apartments-tab" class="tab-content active">
+                <div class="section-header">
+                    <h2 class="section-title">Управление квартирами</h2>
+                    <div class="filter-controls">
+                        <input type="text" class="search-input" placeholder="Поиск по адресу..." onkeyup="filterApartments()">
+                        <select class="filter-select" onchange="filterApartments()">
+                            <option value="all">Все статусы</option>
+                            <option value="pending">На модерации</option>
+                            <option value="available">Одобренные</option>
+                            <option value="booked">Забронированные</option>
+                            <option value="rejected">Отклоненные</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="apartments-content">
+                    <div class="loading">Загрузка квартир...</div>
+                </div>
+            </div>
+
+            <!-- Вкладка Пользователи -->
+            <div id="users-tab" class="tab-content">
+                <div class="section-header">
+                    <h2 class="section-title">Управление пользователями</h2>
+                    <div class="filter-controls">
+                        <input type="text" class="search-input" placeholder="Поиск по имени или email..." onkeyup="filterUsers()">
+                        <select class="filter-select" onchange="filterUsers()">
+                            <option value="all">Все пользователи</option>
+                            <option value="active">Активные</option>
+                            <option value="inactive">Неактивные</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="users-content">
+                    <div class="loading">Загрузка пользователей...</div>
+                </div>
+            </div>
+
+            <!-- Вкладка Бронирования -->
+            <div id="bookings-tab" class="tab-content">
+                <div class="section-header">
+                    <h2 class="section-title">Управление бронированиями</h2>
+                    <div class="filter-controls">
+                        <input type="text" class="search-input" placeholder="Поиск по клиенту..." onkeyup="filterBookings()">
+                        <select class="filter-select" onchange="filterBookings()">
+                            <option value="all">Все бронирования</option>
+                            <option value="active">Активные</option>
+                            <option value="completed">Завершенные</option>
+                            <option value="cancelled">Отмененные</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="bookings-content">
+                    <div class="loading">Загрузка бронирований...</div>
+                </div>
+            </div>
+
+            <!-- Вкладка Платежи -->
+            <div id="payments-tab" class="tab-content">
+                <div class="section-header">
+                    <h2 class="section-title">Управление платежами</h2>
+                    <div class="filter-controls">
+                        <input type="text" class="search-input" placeholder="Поиск по клиенту..." onkeyup="filterPayments()">
+                        <select class="filter-select" onchange="filterPayments()">
+                            <option value="all">Все платежи</option>
+                            <option value="pending">Ожидающие</option>
+                            <option value="completed">Подтвержденные</option>
+                            <option value="cancelled">Отмененные</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="payments-content">
+                    <div class="loading">Загрузка платежей...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для деталей -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'apartments';
+        let apartments = [];
+        let users = [];
+        let bookings = [];
+        let payments = [];
+
+        // Загрузка данных при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAccess();
+        });
+
+        // Проверка доступа администратора
+        function checkAdminAccess() {
+            fetch('api.php?action=check_admin')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadStatistics();
+                    loadApartments();
+                } else {
+                    alert('Доступ запрещен! Необходимо войти как администратор.');
+                    window.location.href = 'admin-login.html';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка проверки доступа:', error);
+                window.location.href = 'admin-login.html';
+            });
+        }
+
+        // Переключение вкладок
+        function showTab(tabName) {
+            currentTab = tabName;
+            
+            // Обновляем активную вкладку
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            // Загружаем данные для вкладки
+            switch(tabName) {
+                case 'apartments':
+                    loadApartments();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'bookings':
+                    loadBookings();
+                    break;
+                case 'payments':
+                    loadPayments();
+                    break;
+            }
+        }
+
+        // Загрузка статистики
+        function loadStatistics() {
+            Promise.all([
+                fetch('api.php?action=get_apartments'),
+                fetch('api.php?action=get_users'),
+                fetch('api.php?action=get_bookings'),
+                fetch('api.php?action=get_payments')
+            ])
+            .then(responses => Promise.all(responses.map(r => r.json())))
+            .then(([apartmentsData, usersData, bookingsData, paymentsData]) => {
+                if (apartmentsData.success) {
+                    apartments = apartmentsData.data;
+                    document.getElementById('total-apartments').textContent = apartments.length;
+                    document.getElementById('pending-apartments').textContent = 
+                        apartments.filter(apt => apt.status === 'pending').length;
+                }
+                
+                if (usersData.success) {
+                    users = usersData.data;
+                    document.getElementById('total-users').textContent = users.length;
+                }
+
+                if (bookingsData.success) {
+                    bookings = bookingsData.data;
+                    document.getElementById('total-bookings').textContent = bookings.length;
+                }
+
+                if (paymentsData.success) {
+                    payments = paymentsData.data;
+                    document.getElementById('total-payments').textContent = payments.length;
+                    const totalRevenue = payments
+                        .filter(payment => payment.status === 'completed')
+                        .reduce((sum, payment) => sum + parseFloat(payment.amount), 0);
+                    document.getElementById('total-revenue').textContent = totalRevenue.toFixed(2);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки статистики:', error);
+            });
+        }
+
+        // Загрузка квартир
+        function loadApartments() {
+            fetch('api.php?action=get_apartments')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    apartments = data.data;
+                    displayApartments(apartments);
+                } else {
+                    document.getElementById('apartments-content').innerHTML = 
+                        '<div class="empty-state">Ошибка загрузки квартир</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки квартир:', error);
+                document.getElementById('apartments-content').innerHTML = 
+                    '<div class="empty-state">Ошибка соединения с сервером</div>';
+            });
+        }
+
+        // Загрузка пользователей
+        function loadUsers() {
+            fetch('api.php?action=get_users')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    users = data.data;
+                    displayUsers(users);
+                } else {
+                    document.getElementById('users-content').innerHTML = 
+                        '<div class="empty-state">Ошибка загрузки пользователей</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки пользователей:', error);
+                document.getElementById('users-content').innerHTML = 
+                    '<div class="empty-state">Ошибка соединения с сервером</div>';
+            });
+        }
+
+        // Удаление пользователя
+        function deleteUser(userId, userName) {
+            if (!confirm(`Вы уверены, что хотите удалить пользователя "${userName}"? Это действие необратимо.`)) {
+                return;
+            }
+            
+            fetch('api.php?action=delete_user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Пользователь успешно удален!');
+                    loadUsers(); // Обновляем список пользователей
+                    loadStatistics(); // Обновляем статистику
+                } else {
+                    alert('❌ Ошибка удаления пользователя: ' + (data.message || 'Неизвестная ошибка'));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка удаления пользователя:', error);
+                alert('❌ Ошибка соединения с сервером');
+            });
+        }
+
+        // Загрузка бронирований
+        function loadBookings() {
+            fetch('api.php?action=get_bookings')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    bookings = data.data;
+                    displayBookings(bookings);
+                } else {
+                    document.getElementById('bookings-content').innerHTML = 
+                        '<div class="empty-state">Ошибка загрузки бронирований</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки бронирований:', error);
+                document.getElementById('bookings-content').innerHTML = 
+                    '<div class="empty-state">Ошибка соединения с сервером</div>';
+            });
+        }
+
+        // Загрузка платежей
+        function loadPayments() {
+            fetch('api.php?action=get_payments')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    payments = data.data;
+                    displayPayments(payments);
+                } else {
+                    document.getElementById('payments-content').innerHTML = 
+                        '<div class="empty-state">Ошибка загрузки платежей</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки платежей:', error);
+                document.getElementById('payments-content').innerHTML = 
+                    '<div class="empty-state">Ошибка соединения с сервером</div>';
+            });
+        }
+
+        // Отображение квартир
+        function displayApartments(apartmentsList) {
+            const container = document.getElementById('apartments-content');
+            
+            if (apartmentsList.length === 0) {
+                container.innerHTML = '<div class="empty-state">Квартиры не найдены</div>';
+                return;
+            }
+
+            const table = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Адрес</th>
+                            <th>Цена</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${apartmentsList.map(apartment => `
+                            <tr>
+                                <td>${apartment.title}</td>
+                                <td>${apartment.address}, ${apartment.district}</td>
+                                <td>${apartment.price} BYN</td>
+                                <td><span class="status-badge status-${apartment.status}">${getStatusText(apartment.status)}</span></td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="viewDetails('apartment', ${apartment.id})">Подробнее</button>
+                                    ${apartment.status === 'pending' ? `
+                                        <button class="btn btn-success" onclick="updateApartmentStatus(${apartment.id}, 'available')">Одобрить</button>
+                                        <button class="btn btn-danger" onclick="updateApartmentStatus(${apartment.id}, 'rejected')">Отклонить</button>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = table;
+        }
+
+        // Отображение пользователей
+        function displayUsers(usersList) {
+            const container = document.getElementById('users-content');
+            
+            if (usersList.length === 0) {
+                container.innerHTML = '<div class="empty-state">Пользователи не найдены</div>';
+                return;
+            }
+
+            const table = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Роль</th>
+                            <th>Дата регистрации</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${usersList.map(user => `
+                            <tr>
+                                <td>${user.name} ${user.surname || ''}</td>
+                                <td>${user.email}</td>
+                                <td>${user.phone || 'Не указан'}</td>
+                                <td><span class="status-badge ${user.role === 'admin' ? 'status-completed' : 'status-pending'}">${user.role === 'admin' ? 'Администратор' : 'Пользователь'}</span></td>
+                                <td>${formatDate(user.created_at)}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="viewDetails('user', ${user.id})">Подробнее</button>
+                                    ${user.role !== 'admin' ? `
+                                        <button class="btn btn-danger" onclick="deleteUser(${user.id}, '${user.name}')">Удалить</button>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = table;
+        }
+
+        // Отображение бронирований
+        function displayBookings(bookingsList) {
+            const container = document.getElementById('bookings-content');
+            
+            if (bookingsList.length === 0) {
+                container.innerHTML = '<div class="empty-state">Бронирования не найдены</div>';
+                return;
+            }
+
+            const table = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Клиент</th>
+                            <th>Квартира</th>
+                            <th>Даты</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${bookingsList.map(booking => `
+                            <tr>
+                                <td>${booking.name}</td>
+                                <td>${booking.apartment_title || 'Квартира'}</td>
+                                <td>${formatDate(booking.check_in)} - ${formatDate(booking.check_out)}</td>
+                                <td>${booking.total_amount} BYN</td>
+                                <td><span class="status-badge status-${booking.status}">${getBookingStatusText(booking.status)}</span></td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="viewDetails('booking', ${booking.id})">Подробнее</button>
+                                    ${booking.status === 'active' ? `
+                                        <button class="btn btn-success" onclick="updateBookingStatus(${booking.id}, 'completed')">Завершить</button>
+                                        <button class="btn btn-danger" onclick="updateBookingStatus(${booking.id}, 'cancelled')">Отменить</button>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = table;
+        }
+
+        // Отображение платежей
+        function displayPayments(paymentsList) {
+            const container = document.getElementById('payments-content');
+            
+            if (paymentsList.length === 0) {
+                container.innerHTML = '<div class="empty-state">Платежи не найдены</div>';
+                return;
+            }
+
+            const table = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Клиент</th>
+                            <th>Сумма</th>
+                            <th>Способ</th>
+                            <th>Статус</th>
+                            <th>Дата</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${paymentsList.map(payment => `
+                            <tr>
+                                <td>#${payment.id}</td>
+                                <td>${payment.client_name || 'Клиент'}</td>
+                                <td>${payment.amount} ${payment.currency}</td>
+                                <td>${getPaymentMethodText(payment.method)}</td>
+                                <td><span class="status-badge status-${payment.status}">${getPaymentStatusText(payment.status)}</span></td>
+                                <td>${formatDate(payment.created_at)}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="viewDetails('payment', ${payment.id})">Подробнее</button>
+                                    ${payment.status === 'pending' ? `
+                                        <button class="btn btn-success" onclick="updatePaymentStatus(${payment.id}, 'completed')">Подтвердить</button>
+                                        <button class="btn btn-danger" onclick="updatePaymentStatus(${payment.id}, 'cancelled')">Отменить</button>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = table;
+        }
+
+        // Фильтрация квартир
+        function filterApartments() {
+            const searchTerm = document.querySelector('#apartments-tab .search-input').value.toLowerCase();
+            const statusFilter = document.querySelector('#apartments-tab .filter-select').value;
+            
+            let filtered = apartments;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(apt => 
+                    apt.title.toLowerCase().includes(searchTerm) ||
+                    apt.address.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(apt => apt.status === statusFilter);
+            }
+            
+            displayApartments(filtered);
+        }
+
+        // Фильтрация пользователей
+        function filterUsers() {
+            const searchTerm = document.querySelector('#users-tab .search-input').value.toLowerCase();
+            const statusFilter = document.querySelector('#users-tab .filter-select').value;
+            
+            let filtered = users;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(user => user.status === statusFilter);
+            }
+            
+            displayUsers(filtered);
+        }
+
+        // Фильтрация бронирований
+        function filterBookings() {
+            const searchTerm = document.querySelector('#bookings-tab .search-input').value.toLowerCase();
+            const statusFilter = document.querySelector('#bookings-tab .filter-select').value;
+            
+            let filtered = bookings;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(booking => 
+                    booking.name.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(booking => booking.status === statusFilter);
+            }
+            
+            displayBookings(filtered);
+        }
+
+        // Фильтрация платежей
+        function filterPayments() {
+            const searchTerm = document.querySelector('#payments-tab .search-input').value.toLowerCase();
+            const statusFilter = document.querySelector('#payments-tab .filter-select').value;
+            
+            let filtered = payments;
+            
+            if (searchTerm) {
+                filtered = filtered.filter(payment => 
+                    (payment.client_name || '').toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(payment => payment.status === statusFilter);
+            }
+            
+            displayPayments(filtered);
+        }
+
+        // Обновление статуса квартиры
+        function updateApartmentStatus(apartmentId, newStatus) {
+            const statusText = newStatus === 'available' ? 'одобрить' : 'отклонить';
+            
+            if (!confirm(`Вы уверены, что хотите ${statusText} эту квартиру?`)) {
+                return;
+            }
+
+            fetch('api.php?action=update_apartment_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    apartment_id: apartmentId,
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(newStatus === 'available' ? '✅ Квартира одобрена!' : '❌ Квартира отклонена.');
+                    loadApartments();
+                    loadStatistics();
+                } else {
+                    alert('Ошибка обновления статуса: ' + (data.message || 'Неизвестная ошибка'));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка соединения с сервером');
+            });
+        }
+
+        // Обновление статуса бронирования
+        function updateBookingStatus(bookingId, newStatus) {
+            const statusText = newStatus === 'completed' ? 'завершить' : 'отменить';
+            
+            if (!confirm(`Вы уверены, что хотите ${statusText} это бронирование?`)) {
+                return;
+            }
+
+            fetch('api.php?action=update_booking_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    booking_id: bookingId,
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(newStatus === 'completed' ? '✅ Бронирование завершено!' : '❌ Бронирование отменено.');
+                    loadBookings();
+                    loadStatistics();
+                } else {
+                    alert('Ошибка обновления статуса: ' + (data.message || 'Неизвестная ошибка'));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка соединения с сервером');
+            });
+        }
+
+        // Обновление статуса платежа
+        function updatePaymentStatus(paymentId, newStatus) {
+            const statusText = newStatus === 'completed' ? 'подтвердить' : 'отменить';
+            
+            if (!confirm(`Вы уверены, что хотите ${statusText} этот платеж?`)) {
+                return;
+            }
+
+            fetch('api.php?action=update_payment_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    payment_id: paymentId,
+                    status: newStatus
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(newStatus === 'completed' ? '✅ Платеж подтвержден!' : '❌ Платеж отменен.');
+                    loadPayments();
+                    loadStatistics();
+                } else {
+                    alert('Ошибка обновления статуса: ' + (data.message || 'Неизвестная ошибка'));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка соединения с сервером');
+            });
+        }
+
+        // Удаление пользователя
+        function deleteUser(userId, userName) {
+            if (!confirm(`Вы уверены, что хотите удалить пользователя "${userName}"? Это действие необратимо.`)) {
+                return;
+            }
+
+            fetch('api.php?action=delete_user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Пользователь успешно удален!');
+                    loadUsers(); // Обновляем список пользователей
+                    loadStatistics(); // Обновляем статистику
+                } else {
+                    alert('Ошибка удаления пользователя: ' + (data.message || 'Неизвестная ошибка'));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка удаления пользователя:', error);
+                alert('Ошибка соединения с сервером');
+            });
+        }
+
+        // Просмотр деталей
+        function viewDetails(type, id) {
+            let item;
+            let content = '';
+
+            switch(type) {
+                case 'apartment':
+                    item = apartments.find(apt => apt.id == id);
+                    if (item) {
+                        content = `
+                            <h2>Детали квартиры</h2>
+                            <div class="detail-row">
+                                <span class="detail-label">Название:</span>
+                                <span class="detail-value">${item.title}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Адрес:</span>
+                                <span class="detail-value">${item.address}, ${item.district}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Комнаты:</span>
+                                <span class="detail-value">${item.rooms}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Этаж:</span>
+                                <span class="detail-value">${item.floor}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Площадь:</span>
+                                <span class="detail-value">${item.area} м²</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Цена:</span>
+                                <span class="detail-value">${item.price} BYN</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Статус:</span>
+                                <span class="detail-value">${getStatusText(item.status)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Описание:</span>
+                                <span class="detail-value">${item.description}</span>
+                            </div>
+                        `;
+                    }
+                    break;
+                case 'user':
+                    item = users.find(user => user.id == id);
+                    if (item) {
+                        content = `
+                            <h2>Детали пользователя</h2>
+                            <div class="detail-row">
+                                <span class="detail-label">Имя:</span>
+                                <span class="detail-value">${item.name} ${item.surname || ''}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value">${item.email}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Телефон:</span>
+                                <span class="detail-value">${item.phone || 'Не указан'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Роль:</span>
+                                <span class="detail-value">${item.role === 'admin' ? 'Администратор' : 'Пользователь'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Дата регистрации:</span>
+                                <span class="detail-value">${formatDate(item.created_at)}</span>
+                            </div>
+                        `;
+                    }
+                    break;
+                case 'booking':
+                    item = bookings.find(booking => booking.id == id);
+                    if (item) {
+                        content = `
+                            <h2>Детали бронирования</h2>
+                            <div class="detail-row">
+                                <span class="detail-label">Клиент:</span>
+                                <span class="detail-value">${item.name}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Квартира:</span>
+                                <span class="detail-value">${item.apartment_title || 'Квартира'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Дата заезда:</span>
+                                <span class="detail-value">${formatDate(item.check_in)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Дата выезда:</span>
+                                <span class="detail-value">${formatDate(item.check_out)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Сумма:</span>
+                                <span class="detail-value">${item.total_amount} BYN</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Статус:</span>
+                                <span class="detail-value">${getBookingStatusText(item.status)}</span>
+                            </div>
+                        `;
+                    }
+                    break;
+                case 'payment':
+                    item = payments.find(payment => payment.id == id);
+                    if (item) {
+                        content = `
+                            <h2>Детали платежа</h2>
+                            <div class="detail-row">
+                                <span class="detail-label">ID платежа:</span>
+                                <span class="detail-value">#${item.id}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Клиент:</span>
+                                <span class="detail-value">${item.client_name || 'Клиент'}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Сумма:</span>
+                                <span class="detail-value">${item.amount} ${item.currency}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Способ оплаты:</span>
+                                <span class="detail-value">${getPaymentMethodText(item.method)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Статус:</span>
+                                <span class="detail-value">${getPaymentStatusText(item.status)}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Дата создания:</span>
+                                <span class="detail-value">${formatDate(item.created_at)}</span>
+                            </div>
+                        `;
+                    }
+                    break;
+            }
+
+            if (content) {
+                document.getElementById('modal-content').innerHTML = content;
+                document.getElementById('details-modal').style.display = 'block';
+            }
+        }
+
+        // Закрытие модального окна
+        function closeModal() {
+            document.getElementById('details-modal').style.display = 'none';
+        }
+
+        // Выход из системы
+        function logout() {
+            fetch('api.php?action=logout', {
+                method: 'POST'
+            })
+            .then(() => {
+                window.location.href = 'admin-login.html';
+            })
+            .catch(error => {
+                console.error('Ошибка выхода:', error);
+                window.location.href = 'admin-login.html';
+            });
+        }
+
+        // Вспомогательные функции
+        function getStatusText(status) {
+            const statusTexts = {
+                'pending': 'На модерации',
+                'available': 'Доступна',
+                'booked': 'Забронирована',
+                'rejected': 'Отклонена'
+            };
+            return statusTexts[status] || status;
+        }
+
+        function getBookingStatusText(status) {
+            const statusTexts = {
+                'active': 'Активное',
+                'completed': 'Завершено',
+                'cancelled': 'Отменено'
+            };
+            return statusTexts[status] || status;
+        }
+
+        function getPaymentStatusText(status) {
+            const statusTexts = {
+                'pending': 'Ожидает',
+                'completed': 'Подтвержден',
+                'cancelled': 'Отменен'
+            };
+            return statusTexts[status] || status;
+        }
+
+        function getPaymentMethodText(method) {
+            const methodTexts = {
+                'bank-transfer': 'Банковский перевод',
+                'erip': 'ЕРИП',
+                'card': 'Онлайн-платеж'
+            };
+            return methodTexts[method] || method;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Не указана';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            const modal = document.getElementById('details-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
